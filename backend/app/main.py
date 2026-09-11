@@ -51,6 +51,17 @@ app.include_router(health.router)
 app.include_router(analyses.router)
 
 
+@app.get("/", tags=["Root"])
+async def root():
+    return {
+        "name": "Quantum Pen Flip Predictor API",
+        "status": "running",
+        "docs": "/docs",
+        "health": "/api/health",
+    }
+
+
+
 # ---------------------------------------------------------------------------
 # Global exception handler — never expose stack traces to clients
 # ---------------------------------------------------------------------------
