@@ -1,13 +1,13 @@
 """
-Pen detection via HSV colour thresholding.
+Pen detection via geometric shape & edge analysis (colour-agnostic).
 
-Pipeline (docs/BACKEND.md §10):
-  Frame → BGR→HSV → colour threshold → mask → noise removal
-        → contour detection → candidate selection → pen bounding box
+Pipeline:
+  Frame → BGR→Grayscale → Gaussian Blur → Canny Edge Detection → Edge Dilation
+        → Contours → Minimum Area Rectangle (Rotation-invariant)
+        → Aspect Ratio Filtering (Rods / Pens) → Bounding Box & Confidence
 
-The pen must carry a clearly detectable neon/saturated colour marker
-(docs/PRD.md §3).  HSV ranges are configured in config.py and are
-overridable via environment variables.
+This algorithm detects pens of any colour (black, blue, white, red, green, etc.)
+by identifying elongated cylindrical / rod geometries with an aspect ratio >= 3.0.
 """
 
 from __future__ import annotations
@@ -17,7 +17,13 @@ from typing import Optional, Tuple
 import cv2
 import numpy as np
 
-from app.config import PEN_HSV_LOWER, PEN_HSV_UPPER, PEN_MIN_CONTOUR_AREA
+from app.config import (
+    PEN_HSV_LOWER,
+    PEN_HSV_UPPER,
+    PEN_MAX_ASPECT_RATIO,
+    PEN_MIN_ASPECT_RATIO,
+    PEN_MIN_CONTOUR_AREA,
+)
 
 # Type alias: bounding box (x, y, w, h) or None
 BoundingBox = Optional[Tuple[int, int, int, int]]
@@ -25,44 +31,66 @@ BoundingBox = Optional[Tuple[int, int, int, int]]
 
 def detect_pen(frame: np.ndarray) -> Tuple[BoundingBox, float]:
     """
-    Detect the pen in a single BGR video frame.
+    Detect a pen of any colour in a single BGR video frame using geometric shape detection.
 
     Returns
     -------
     (bounding_box, confidence)
         bounding_box : (x, y, w, h) or None if no pen detected.
-        confidence   : 0.0–1.0 detection confidence based on contour clarity.
+        confidence   : 0.0–1.0 detection confidence based on aspect ratio and contour clarity.
     """
-    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    if frame is None or frame.size == 0:
+        return None, 0.0
 
-    lower = np.array(PEN_HSV_LOWER, dtype=np.uint8)
-    upper = np.array(PEN_HSV_UPPER, dtype=np.uint8)
-    mask = cv2.inRange(hsv, lower, upper)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
 
-    # Noise removal
-    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
-    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
-    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+    # Edge detection to capture the pen boundary regardless of surface colour
+    edges = cv2.Canny(blurred, 50, 150)
 
-    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    # Dilate slightly to join edges broken by motion blur or specular reflection
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
+    edges = cv2.dilate(edges, kernel, iterations=1)
 
+    contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     if not contours:
         return None, 0.0
 
-    # Select the largest contour above the minimum area threshold
-    valid = [c for c in contours if cv2.contourArea(c) >= PEN_MIN_CONTOUR_AREA]
-    if not valid:
-        return None, 0.0
+    best_bbox = None
+    best_score = 0.0
+    best_aspect_ratio = 1.0
 
-    best = max(valid, key=cv2.contourArea)
-    area = cv2.contourArea(best)
-    x, y, w, h = cv2.boundingRect(best)
+    for c in contours:
+        area = cv2.contourArea(c)
+        if area < PEN_MIN_CONTOUR_AREA:
+            continue
 
-    # Confidence heuristic: ratio of contour fill inside its bounding box
-    bbox_area = max(w * h, 1)
-    confidence = min(1.0, area / bbox_area)
+        # Rotation-invariant minimum area bounding rectangle
+        rect = cv2.minAreaRect(c)
+        (_, _), (rw, rh), _ = rect
 
-    return (x, y, w, h), round(confidence, 3)
+        min_dim = min(rw, rh)
+        max_dim = max(rw, rh)
+        if min_dim <= 0:
+            continue
+
+        aspect_ratio = max_dim / min_dim
+
+        # Pens are elongated rods with aspect ratio typically between 3.0 and 25.0
+        if PEN_MIN_ASPECT_RATIO <= aspect_ratio <= PEN_MAX_ASPECT_RATIO:
+            score = area * aspect_ratio
+            if score > best_score:
+                best_score = score
+                best_bbox = cv2.boundingRect(c)
+                best_aspect_ratio = aspect_ratio
+
+    if best_bbox is not None:
+        # Confidence score derived from how distinctly elongated the contour is
+        # Clamped between 0.50 and 0.99
+        confidence = min(0.99, max(0.50, 0.50 + (best_aspect_ratio - PEN_MIN_ASPECT_RATIO) * 0.05))
+        return best_bbox, round(confidence, 3)
+
+    return None, 0.0
 
 
 def bounding_box_center(bbox: Tuple[int, int, int, int]) -> Tuple[float, float]:

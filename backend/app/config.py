@@ -29,9 +29,11 @@ ALLOWED_EXTENSIONS: set[str] = {"mp4", "mov", "avi", "mkv", "webm"}
 # Computer-vision tuning
 # ---------------------------------------------------------------------------
 # HSV pen-marker detection range (neon/highly-saturated colour, e.g. green)
-PEN_HSV_LOWER = (35, 100, 100)   # lower bound (H, S, V)
-PEN_HSV_UPPER = (85, 255, 255)   # upper bound
+PEN_HSV_LOWER = (35, 100, 100)   # lower bound (H, S, V) [retained for compatibility]
+PEN_HSV_UPPER = (85, 255, 255)   # upper bound [retained for compatibility]
 PEN_MIN_CONTOUR_AREA: int = int(os.getenv("PEN_MIN_CONTOUR_AREA", "50"))
+PEN_MIN_ASPECT_RATIO: float = float(os.getenv("PEN_MIN_ASPECT_RATIO", "3.0"))
+PEN_MAX_ASPECT_RATIO: float = float(os.getenv("PEN_MAX_ASPECT_RATIO", "25.0"))
 
 # Maximum consecutive frames without a pen detection before interpolation
 # switches to "tracking_lost"
