@@ -35,7 +35,8 @@ PEN_MIN_CONTOUR_AREA: int = int(os.getenv("PEN_MIN_CONTOUR_AREA", "50"))
 
 # Maximum consecutive frames without a pen detection before interpolation
 # switches to "tracking_lost"
-MAX_OCCLUDED_FRAMES: int = int(os.getenv("MAX_OCCLUDED_FRAMES", "30"))
+MAX_OCCLUDED_FRAMES: int = int(os.getenv("MAX_OCCLUDED_FRAMES", "100"))
+
 
 # MediaPipe hand landmark index used as the rotation centre.
 # 9 = Middle-Finger MCP — stable reference at the base of the middle finger.
