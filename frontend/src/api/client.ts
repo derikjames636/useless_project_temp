@@ -5,7 +5,8 @@ import type {
 } from '../types/analysis';
 import { MOCK_ANALYSIS_COMPLETED, MOCK_TRAJECTORY } from './mockData';
 
-const API_BASE = import.meta.env.VITE_API_URL || '/api';
+const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+const API_BASE = import.meta.env.VITE_API_URL || (isLocal ? '/api' : 'https://pen-flip-backend.onrender.com/api');
 
 export class ApiService {
   private useMockFallback: boolean = false;
