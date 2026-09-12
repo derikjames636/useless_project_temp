@@ -71,3 +71,26 @@ def test_bounding_box_center():
     cx, cy = bounding_box_center(bbox)
     assert cx == 125.0
     assert cy == 215.0
+
+
+def test_detect_pen_spatial_constraint():
+    """Verify that detections outside the hand_bbox ROI are strictly rejected."""
+    canvas = create_blank_canvas(bg_color=(240, 240, 240))
+    # Draw blue pen far away at (500, 400)
+    cv2.line(canvas, (450, 400), (550, 400), (255, 0, 0), thickness=14)
+
+    # Define a hand_bbox far away at (50, 50, 200, 200)
+    hand_bbox = (50, 50, 200, 200)
+
+    # Detections outside hand_bbox should be rejected
+    bbox, conf = detect_pen(canvas, hand_bbox=hand_bbox)
+    assert bbox is None
+    assert conf == 0.0
+
+    # Draw blue pen INSIDE hand_bbox (100, 100) -> (180, 100)
+    cv2.line(canvas, (100, 100), (180, 100), (255, 0, 0), thickness=14)
+    bbox_inside, conf_inside = detect_pen(canvas, hand_bbox=hand_bbox)
+    assert bbox_inside is not None
+    assert conf_inside >= 0.50
+
+

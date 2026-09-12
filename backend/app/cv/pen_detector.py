@@ -29,20 +29,42 @@ from app.config import (
 BoundingBox = Optional[Tuple[int, int, int, int]]
 
 
-def detect_pen(frame: np.ndarray) -> Tuple[BoundingBox, float]:
+def detect_pen(
+    frame: np.ndarray,
+    hand_bbox: Optional[Tuple[int, int, int, int]] = None,
+    hsv_bounds: Optional[Tuple[np.ndarray, np.ndarray]] = None,
+) -> Tuple[BoundingBox, float]:
     """
-    Detect a pen of any colour in a single BGR video frame using geometric shape detection.
+    Detect a pen in a BGR video frame using geometric shape & edge analysis,
+    optionally filtered by calibrated HSV color bounds.
+
+    Parameters
+    ----------
+    frame      : input BGR image frame.
+    hand_bbox  : optional (hx, hy, hw, hh) padded hand ROI bounding box.
+    hsv_bounds : optional (lower_color, upper_color) numpy array bounds.
 
     Returns
     -------
     (bounding_box, confidence)
-        bounding_box : (x, y, w, h) or None if no pen detected.
-        confidence   : 0.0–1.0 detection confidence based on aspect ratio and contour clarity.
     """
     if frame is None or frame.size == 0:
         return None, 0.0
 
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    working_frame = frame
+    if hand_bbox is not None:
+        hx, hy, hw, hh = hand_bbox
+        mask = np.zeros(frame.shape[:2], dtype=np.uint8)
+        mask[hy : hy + hh, hx : hx + hw] = 255
+        working_frame = cv2.bitwise_and(frame, frame, mask=mask)
+
+    if hsv_bounds is not None:
+        lower_color, upper_color = hsv_bounds
+        hsv = cv2.cvtColor(working_frame, cv2.COLOR_BGR2HSV)
+        color_mask = cv2.inRange(hsv, lower_color, upper_color)
+        working_frame = cv2.bitwise_and(working_frame, working_frame, mask=color_mask)
+
+    gray = cv2.cvtColor(working_frame, cv2.COLOR_BGR2GRAY)
     blurred = cv2.GaussianBlur(gray, (5, 5), 0)
 
     # Edge detection to capture the pen boundary regardless of surface colour
@@ -52,7 +74,8 @@ def detect_pen(frame: np.ndarray) -> Tuple[BoundingBox, float]:
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
     edges = cv2.dilate(edges, kernel, iterations=1)
 
-    contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    contours, _ = cv2.findContours(edges, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+
     if not contours:
         return None, 0.0
 
@@ -64,6 +87,19 @@ def detect_pen(frame: np.ndarray) -> Tuple[BoundingBox, float]:
         area = cv2.contourArea(c)
         if area < PEN_MIN_CONTOUR_AREA:
             continue
+
+        c_bbox = cv2.boundingRect(c)
+        cx, cy = bounding_box_center(c_bbox)
+
+        # Method 1 & 3: Force strict spatial constraint if hand_bbox is present
+        if hand_bbox is not None:
+            hx, hy, hw, hh = hand_bbox
+            # Ignore artificial contour created by the ROI mask rectangle boundary
+            if abs(c_bbox[2] - hw) <= 4 and abs(c_bbox[3] - hh) <= 4:
+                continue
+            if not (hx <= cx <= hx + hw and hy <= cy <= hy + hh):
+                continue
+
 
         # Rotation-invariant minimum area bounding rectangle
         rect = cv2.minAreaRect(c)
@@ -81,7 +117,7 @@ def detect_pen(frame: np.ndarray) -> Tuple[BoundingBox, float]:
             score = area * aspect_ratio
             if score > best_score:
                 best_score = score
-                best_bbox = cv2.boundingRect(c)
+                best_bbox = c_bbox
                 best_aspect_ratio = aspect_ratio
 
     if best_bbox is not None:
@@ -93,6 +129,7 @@ def detect_pen(frame: np.ndarray) -> Tuple[BoundingBox, float]:
     return None, 0.0
 
 
+
 def bounding_box_center(bbox: Tuple[int, int, int, int]) -> Tuple[float, float]:
     """
     Return the geometric centre of a bounding box.
@@ -101,3 +138,58 @@ def bounding_box_center(bbox: Tuple[int, int, int, int]) -> Tuple[float, float]:
     """
     x, y, w, h = bbox
     return x + w / 2, y + h / 2
+
+
+def detect_motion_pen(
+    curr_frame: np.ndarray,
+    prev_gray_blur: Optional[np.ndarray],
+    finger_roi: Optional[Tuple[int, int, int, int]] = None,
+) -> Tuple[BoundingBox, float, Optional[Tuple[float, float]], np.ndarray]:
+    """
+    Detect pen movement using cv2.absdiff motion masking between MediaPipe finger ROI points (LM 0, 4, 8).
+    Calculates center (x, y) using cv2.moments.
+
+    Returns
+    -------
+    (bounding_box, confidence, center_pt, curr_gray_blur)
+    """
+    if curr_frame is None or curr_frame.size == 0:
+        return None, 0.0, None, np.zeros((1, 1), dtype=np.uint8)
+
+    gray = cv2.cvtColor(curr_frame, cv2.COLOR_BGR2GRAY)
+    curr_gray_blur = cv2.GaussianBlur(gray, (5, 5), 0)
+
+    if prev_gray_blur is None or prev_gray_blur.shape != curr_gray_blur.shape:
+        return None, 0.0, None, curr_gray_blur
+
+    diff = cv2.absdiff(curr_gray_blur, prev_gray_blur)
+    _, thresh = cv2.threshold(diff, 20, 255, cv2.THRESH_BINARY)
+
+    # Apply MediaPipe finger ROI as mask over motion data
+    mask = np.zeros_like(thresh)
+    if finger_roi is not None:
+        fx, fy, fw, fh = finger_roi
+        mask[fy : fy + fh, fx : fx + fw] = 255
+    else:
+        mask[:] = 255
+
+    masked_motion = cv2.bitwise_and(thresh, thresh, mask=mask)
+
+    contours, _ = cv2.findContours(masked_motion, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    if not contours:
+        return None, 0.0, None, curr_gray_blur
+
+    largest_c = max(contours, key=cv2.contourArea)
+    area = cv2.contourArea(largest_c)
+
+    if area < 10:
+        return None, 0.0, None, curr_gray_blur
+
+    M = cv2.moments(largest_c)
+    if M["m00"] > 0:
+        cx = float(M["m10"] / M["m00"])
+        cy = float(M["m01"] / M["m00"])
+        bbox = cv2.boundingRect(largest_c)
+        return bbox, 0.95, (cx, cy), curr_gray_blur
+
+    return None, 0.0, None, curr_gray_blur

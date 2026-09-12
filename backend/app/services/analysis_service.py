@@ -26,6 +26,7 @@ from app.cv.tracker import track_video
 from app.cv.trajectory import build_trajectory_points, save_trajectory
 from app.database.models import AnalysisModel
 from app.metrics.center_accuracy import compute_center_accuracy
+from app.metrics.flicker_detector import detect_flicker
 from app.metrics.kinetics import compute_kinetics
 from app.metrics.rpm import compute_rpm
 from app.metrics.wobble import compute_wobble
@@ -170,6 +171,7 @@ def run_analysis(analysis_id: str, video_path: Path, db_session_factory) -> None
         _, center_accuracy = compute_center_accuracy(pen_positions, rotation_center)
         _, wobble_percent = compute_wobble(pen_positions, rotation_center)
         avg_vel, peak_vel, avg_acc, peak_acc = compute_kinetics(pen_positions, timestamps)
+        anti_score, is_fake_flicker, verdict = detect_flicker(pen_positions, timestamps, rotation_center)
 
         # Tracking confidence: mean of detected frame confidences
         confidences = [r.tracking_confidence for r in detected_records if r.tracking_confidence > 0]
@@ -186,6 +188,9 @@ def run_analysis(analysis_id: str, video_path: Path, db_session_factory) -> None
             avg_acceleration=avg_acc,
             peak_acceleration=peak_acc,
             tracking_confidence=tracking_confidence,
+            is_fake_flicker=is_fake_flicker,
+            verdict=verdict,
+            override_score=anti_score,
         )
 
         # ---- Save trajectory ----
@@ -204,6 +209,8 @@ def run_analysis(analysis_id: str, video_path: Path, db_session_factory) -> None
         record.tracking_confidence = aggregated.tracking_confidence
         record.rotations = aggregated.rotations
         record.overall_score = aggregated.overall_score
+        record.is_fake_flicker = 1 if aggregated.is_fake_flicker else 0
+        record.verdict = aggregated.verdict
         record.completed_at = datetime.now(timezone.utc)
         _set_status(db, record, "completed", progress=100)
 

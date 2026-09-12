@@ -86,6 +86,8 @@ def _db_to_response(record: AnalysisModel, analysis_id: str) -> AnalysisResponse
             tracking_confidence=record.tracking_confidence or 0.0,
             rotations=record.rotations or 0,
             overall_score=record.overall_score,
+            is_fake_flicker=bool(record.is_fake_flicker) if record.is_fake_flicker is not None else False,
+            verdict=record.verdict,
         )
 
     files = None

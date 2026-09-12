@@ -93,6 +93,81 @@ def detect_rotation_center(frame: np.ndarray) -> Optional[Tuple[float, float]]:
     return None
 
 
+def detect_hand_bbox(
+    frame: np.ndarray, padding: int = 100
+) -> Optional[Tuple[int, int, int, int]]:
+    """
+    Detect hand bounding box padded by specified pixels for spatial ROI masking.
+
+    Returns
+    -------
+    (x, y, w, h) in pixel coordinates, or None if no hand is visible
+    or mediapipe is unavailable.
+    """
+    detector = _get_detector()
+    if detector is None:
+        return None
+
+    h, w = frame.shape[:2]
+    rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    results = detector.process(rgb)
+
+    if not results.multi_hand_landmarks:
+        return None
+
+    landmarks = results.multi_hand_landmarks[0].landmark
+    xs = [lm.x * w for lm in landmarks]
+    ys = [lm.y * h for lm in landmarks]
+
+    x_min = max(0, int(min(xs) - padding))
+    y_min = max(0, int(min(ys) - padding))
+    x_max = min(w, int(max(xs) + padding))
+    y_max = min(h, int(max(ys) + padding))
+
+    bw = max(1, x_max - x_min)
+    bh = max(1, y_max - y_min)
+
+    return x_min, y_min, bw, bh
+
+
+def detect_finger_roi(
+    frame: np.ndarray, padding: int = 30
+) -> Optional[Tuple[int, int, int, int]]:
+    """
+    Extract a dynamic bounding box (ROI) around Palm Base (LM 0),
+    Thumb Tip (LM 4), and Index Fingertip (LM 8) with specified padding.
+    """
+    detector = _get_detector()
+    if detector is None:
+        return None
+
+    h, w = frame.shape[:2]
+    rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    results = detector.process(rgb)
+
+    if not results.multi_hand_landmarks:
+        return None
+
+    landmarks = results.multi_hand_landmarks[0].landmark
+    target_indices = [0, 4, 8]
+    xs = [landmarks[i].x * w for i in target_indices if i < len(landmarks)]
+    ys = [landmarks[i].y * h for i in target_indices if i < len(landmarks)]
+
+    if not xs:
+        return None
+
+    x_min = max(0, int(min(xs) - padding))
+    y_min = max(0, int(min(ys) - padding))
+    x_max = min(w, int(max(xs) + padding))
+    y_max = min(h, int(max(ys) + padding))
+
+    bw = max(1, x_max - x_min)
+    bh = max(1, y_max - y_min)
+
+    return x_min, y_min, bw, bh
+
+
+
 def close_detector() -> None:
     """Release MediaPipe resources. Call on application shutdown."""
     global _hands_detector

@@ -16,6 +16,7 @@ where:
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Optional
 
 from app.config import (
     MAX_EXPECTED_RPM,
@@ -37,6 +38,8 @@ class AggregatedResult:
     tracking_confidence: float
     rotations: int
     overall_score: float
+    is_fake_flicker: bool = False
+    verdict: str = ""
 
 
 def aggregate_results(
@@ -49,6 +52,9 @@ def aggregate_results(
     avg_acceleration: float,
     peak_acceleration: float,
     tracking_confidence: float,
+    is_fake_flicker: bool = False,
+    verdict: str = "",
+    override_score: Optional[float] = None,
 ) -> AggregatedResult:
     """
     Combine individual metric values into an AggregatedResult.
@@ -57,16 +63,23 @@ def aggregate_results(
     -------
     AggregatedResult with all canonical fields populated.
     """
-    # Sub-scores (0–100)
-    s_rpm = min(100.0, (rpm / MAX_EXPECTED_RPM) * 100.0)
-    s_center = max(0.0, min(100.0, center_accuracy))
-    s_stability = max(0.0, 100.0 - wobble_percent)
+    if override_score is not None:
+        overall = override_score
+    else:
+        # Sub-scores (0–100)
+        s_rpm = min(100.0, (rpm / MAX_EXPECTED_RPM) * 100.0)
+        s_center = max(0.0, min(100.0, center_accuracy))
+        s_stability = max(0.0, 100.0 - wobble_percent)
 
-    overall = (
-        SCORE_WEIGHT_RPM * s_rpm
-        + SCORE_WEIGHT_CENTER * s_center
-        + SCORE_WEIGHT_STABILITY * s_stability
-    )
+        overall = (
+            SCORE_WEIGHT_RPM * s_rpm
+            + SCORE_WEIGHT_CENTER * s_center
+            + SCORE_WEIGHT_STABILITY * s_stability
+        )
+
+        # Cap score at 30.0 (3.0 on 10-pt scale) if finger twitching / fake flicker detected
+        if is_fake_flicker:
+            overall = min(overall, 30.0)
 
     return AggregatedResult(
         rpm=rpm,
@@ -79,4 +92,6 @@ def aggregate_results(
         tracking_confidence=tracking_confidence,
         rotations=rotations,
         overall_score=round(overall, 1),
+        is_fake_flicker=is_fake_flicker,
+        verdict=verdict,
     )

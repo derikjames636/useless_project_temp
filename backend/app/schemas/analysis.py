@@ -39,6 +39,8 @@ class ResultsSchema(BaseModel):
     tracking_confidence: float
     rotations: int
     overall_score: Optional[float] = None
+    is_fake_flicker: Optional[bool] = None
+    verdict: Optional[str] = None
 
 
 class FilesSchema(BaseModel):

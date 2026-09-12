@@ -29,6 +29,8 @@ export interface AnalysisResults {
   tracking_confidence: number;
   rotations: number;
   overall_score?: number; // Optional technique score if returned by backend
+  is_fake_flicker?: boolean;
+  verdict?: string;
 }
 
 export interface AnalysisFiles {

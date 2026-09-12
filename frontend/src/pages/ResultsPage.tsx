@@ -134,6 +134,37 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({
             subtitle="Calculated from angular velocity, center accuracy & orbital stability."
           />
 
+          {/* Verdict Banner */}
+          {results.verdict && (
+            <div className="telemetry-card" style={{
+              padding: '16px 20px',
+              borderRadius: '12px',
+              background: results.is_fake_flicker ? 'rgba(239, 68, 68, 0.08)' : 'rgba(16, 185, 129, 0.08)',
+              border: results.is_fake_flicker ? '1px solid rgba(239, 68, 68, 0.3)' : '1px solid rgba(16, 185, 129, 0.3)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '6px',
+            }}>
+              <div style={{
+                fontSize: '11px',
+                fontFamily: 'var(--font-mono)',
+                fontWeight: 700,
+                color: results.is_fake_flicker ? '#EF4444' : '#10B981',
+                letterSpacing: '0.05em',
+              }}>
+                {results.is_fake_flicker ? '⚠️ VERDICT · FAKE FLICKER DETECTED' : '✨ VERDICT · EVALUATION'}
+              </div>
+              <div style={{
+                fontSize: '14px',
+                fontWeight: 600,
+                color: results.is_fake_flicker ? '#FCA5A5' : 'var(--text-primary)',
+                lineHeight: 1.4,
+              }}>
+                "{results.verdict}"
+              </div>
+            </div>
+          )}
+
           {/* Quick breakdown panel */}
           <div className="telemetry-card" style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>

@@ -46,8 +46,10 @@ class AnalysisModel(Base):
     tracking_confidence = Column(Float, nullable=True)
     rotations = Column(Integer, nullable=True)
 
-    # Aggregate score (optional)
+    # Aggregate score & verdict
     overall_score = Column(Float, nullable=True)
+    is_fake_flicker = Column(Integer, nullable=True)
+    verdict = Column(String, nullable=True)
 
     # Timestamps
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
