@@ -18,18 +18,18 @@ export const MetricCards: React.FC<MetricCardsProps> = ({ results }) => {
         {/* RPM Card */}
         <div className="telemetry-card" style={{ position: 'relative' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
-              ANGULAR SPEED (RPM) ✏️
+            <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--chalk-yellow)', fontFamily: 'var(--font-typewriter)' }}>
+              ANGULAR VELOCITY (RPM) ✏️
             </span>
-            <div style={{ padding: '6px', borderRadius: '8px', backgroundColor: 'rgba(93, 226, 255, 0.12)', color: 'var(--accent-blue)' }}>
+            <div style={{ padding: '6px', borderRadius: '8px', backgroundColor: '#351E0E', color: 'var(--chalk-yellow)', border: '1px solid #704727' }}>
               <Zap size={16} />
             </div>
           </div>
 
           <div style={{ marginTop: '12px' }}>
-            <div className="text-metric" style={{ color: 'var(--accent-blue)', fontFamily: 'var(--font-mono)' }}>
+            <div className="text-metric" style={{ color: 'var(--chalk-white)', fontFamily: 'var(--font-chalk)' }}>
               {Math.round(results.rpm)}
-              <span style={{ fontSize: '18px', fontWeight: 500, color: 'var(--text-secondary)', marginLeft: '6px' }}>
+              <span style={{ fontSize: '18px', fontWeight: 600, color: 'var(--chalk-yellow)', marginLeft: '8px', fontFamily: 'var(--font-typewriter)' }}>
                 RPM
               </span>
             </div>
@@ -41,34 +41,35 @@ export const MetricCards: React.FC<MetricCardsProps> = ({ results }) => {
             gap: '8px',
             marginTop: '14px',
             fontSize: '12px',
-            color: 'var(--status-success)',
           }}>
             <span style={{
               padding: '2px 6px',
               borderRadius: '4px',
-              backgroundColor: 'rgba(90, 228, 168, 0.12)',
-              fontFamily: 'var(--font-mono)',
+              backgroundColor: 'rgba(74, 222, 128, 0.15)',
+              color: '#86EFAC',
+              fontFamily: 'var(--font-typewriter)',
               fontWeight: 700,
+              border: '1px solid rgba(74, 222, 128, 0.3)',
             }}>
               PEAK VELOCITY
             </span>
-            <span style={{ color: 'var(--text-secondary)' }}>Continuous angular momentum</span>
+            <span style={{ color: '#94A3B8', fontFamily: 'var(--font-handwriting)' }}>Angular momentum constant</span>
           </div>
         </div>
 
         {/* Center Accuracy Card */}
         <div className="telemetry-card" style={{ position: 'relative' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
-              KNUCKLE AXIS PRECISION 🎯
+            <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--chalk-yellow)', fontFamily: 'var(--font-typewriter)' }}>
+              KNUCKLE AXIS PIVOT 🎯
             </span>
-            <div style={{ padding: '6px', borderRadius: '8px', backgroundColor: 'rgba(90, 228, 168, 0.12)', color: 'var(--status-success)' }}>
+            <div style={{ padding: '6px', borderRadius: '8px', backgroundColor: '#351E0E', color: '#86EFAC', border: '1px solid #704727' }}>
               <Target size={16} />
             </div>
           </div>
 
           <div style={{ marginTop: '12px' }}>
-            <div className="text-metric" style={{ color: 'var(--status-success)', fontFamily: 'var(--font-mono)' }}>
+            <div className="text-metric" style={{ color: '#86EFAC', fontFamily: 'var(--font-chalk)' }}>
               {results.center_accuracy.toFixed(1)}%
             </div>
           </div>
@@ -83,30 +84,31 @@ export const MetricCards: React.FC<MetricCardsProps> = ({ results }) => {
             <span style={{
               padding: '2px 6px',
               borderRadius: '4px',
-              backgroundColor: 'rgba(90, 228, 168, 0.12)',
-              color: 'var(--status-success)',
-              fontFamily: 'var(--font-mono)',
+              backgroundColor: 'rgba(74, 222, 128, 0.15)',
+              color: '#86EFAC',
+              fontFamily: 'var(--font-typewriter)',
               fontWeight: 700,
+              border: '1px solid rgba(74, 222, 128, 0.3)',
             }}>
               BALANCED
             </span>
-            <span style={{ color: 'var(--text-secondary)' }}>Finger pivot offset &lt; 5%</span>
+            <span style={{ color: '#94A3B8', fontFamily: 'var(--font-handwriting)' }}>Pivot drift &lt; 4.5%</span>
           </div>
         </div>
 
         {/* Wobble Card */}
         <div className="telemetry-card" style={{ position: 'relative' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
+            <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--chalk-yellow)', fontFamily: 'var(--font-typewriter)' }}>
               DESK CLATTER STABILITY 🌊
             </span>
-            <div style={{ padding: '6px', borderRadius: '8px', backgroundColor: 'rgba(254, 240, 138, 0.12)', color: '#FEF08A' }}>
+            <div style={{ padding: '6px', borderRadius: '8px', backgroundColor: '#351E0E', color: 'var(--chalk-orange)', border: '1px solid #704727' }}>
               <Waves size={16} />
             </div>
           </div>
 
           <div style={{ marginTop: '12px' }}>
-            <div className="text-metric" style={{ color: '#FEF08A', fontFamily: 'var(--font-mono)' }}>
+            <div className="text-metric" style={{ color: '#FDE047', fontFamily: 'var(--font-chalk)' }}>
               {results.wobble_percent.toFixed(1)}%
             </div>
           </div>
@@ -121,14 +123,15 @@ export const MetricCards: React.FC<MetricCardsProps> = ({ results }) => {
             <span style={{
               padding: '2px 6px',
               borderRadius: '4px',
-              backgroundColor: 'rgba(254, 240, 138, 0.12)',
+              backgroundColor: 'rgba(254, 240, 138, 0.15)',
               color: '#FEF08A',
-              fontFamily: 'var(--font-mono)',
+              fontFamily: 'var(--font-typewriter)',
               fontWeight: 700,
+              border: '1px solid rgba(254, 240, 138, 0.3)',
             }}>
               SILENT SPIN
             </span>
-            <span style={{ color: 'var(--text-secondary)' }}>RMS path variance: 2.4 px</span>
+            <span style={{ color: '#94A3B8', fontFamily: 'var(--font-handwriting)' }}>RMS orbital stability</span>
           </div>
         </div>
       </div>
@@ -140,53 +143,53 @@ export const MetricCards: React.FC<MetricCardsProps> = ({ results }) => {
         gap: '12px',
       }}>
         {results.aura_score !== undefined && (
-          <div style={{ background: 'linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%)', border: '1px solid rgba(168, 85, 247, 0.3)', borderRadius: '10px', padding: '14px 18px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#C084FC', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
-              <Sparkles size={13} color="#E879F9" />
+          <div style={{ background: '#351E0E', border: '1px solid #704727', borderRadius: '8px', padding: '14px 18px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#FEF08A', fontFamily: 'var(--font-typewriter)', fontWeight: 700 }}>
+              <Sparkles size={13} color="#FEF08A" />
               <span>AURA SCORE</span>
             </div>
-            <div style={{ fontSize: '20px', fontWeight: 800, fontFamily: 'var(--font-mono)', marginTop: '4px', color: '#F472B6' }}>
-              {results.aura_score.toLocaleString()} <span style={{ fontSize: '12px', color: '#C084FC' }}>pts</span>
+            <div style={{ fontSize: '20px', fontWeight: 800, fontFamily: 'var(--font-chalk)', marginTop: '4px', color: 'var(--chalk-yellow)' }}>
+              {results.aura_score.toLocaleString()} <span style={{ fontSize: '12px', color: '#CBD5E1', fontFamily: 'var(--font-typewriter)' }}>pts</span>
             </div>
           </div>
         )}
 
-        <div style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-subtle)', borderRadius: '10px', padding: '14px 18px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+        <div style={{ background: '#18281F', border: '1px solid var(--border-chalk)', borderRadius: '8px', padding: '14px 18px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'var(--font-typewriter)' }}>
             <Gauge size={13} />
             <span>AVG VELOCITY</span>
           </div>
-          <div style={{ fontSize: '20px', fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: '4px' }}>
+          <div style={{ fontSize: '20px', fontWeight: 700, fontFamily: 'var(--font-typewriter)', marginTop: '4px', color: 'var(--chalk-white)' }}>
             {results.average_velocity} <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>m/s</span>
           </div>
         </div>
 
-        <div style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-subtle)', borderRadius: '10px', padding: '14px 18px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+        <div style={{ background: '#18281F', border: '1px solid var(--border-chalk)', borderRadius: '8px', padding: '14px 18px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'var(--font-typewriter)' }}>
             <Activity size={13} />
-            <span>PEAK ACCELERATION</span>
+            <span>PEAK ACCEL</span>
           </div>
-          <div style={{ fontSize: '20px', fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: '4px' }}>
+          <div style={{ fontSize: '20px', fontWeight: 700, fontFamily: 'var(--font-typewriter)', marginTop: '4px', color: 'var(--chalk-white)' }}>
             {results.peak_acceleration} <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>m/s²</span>
           </div>
         </div>
 
-        <div style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-subtle)', borderRadius: '10px', padding: '14px 18px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+        <div style={{ background: '#18281F', border: '1px solid var(--border-chalk)', borderRadius: '8px', padding: '14px 18px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'var(--font-typewriter)' }}>
             <Compass size={13} />
             <span>ROTATIONS</span>
           </div>
-          <div style={{ fontSize: '20px', fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: '4px' }}>
+          <div style={{ fontSize: '20px', fontWeight: 700, fontFamily: 'var(--font-typewriter)', marginTop: '4px', color: 'var(--chalk-white)' }}>
             {results.rotations} <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>revs</span>
           </div>
         </div>
 
-        <div style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-subtle)', borderRadius: '10px', padding: '14px 18px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+        <div style={{ background: '#18281F', border: '1px solid var(--border-chalk)', borderRadius: '8px', padding: '14px 18px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'var(--font-typewriter)' }}>
             <ShieldCheck size={13} />
             <span>CONFIDENCE</span>
           </div>
-          <div style={{ fontSize: '20px', fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: '4px', color: 'var(--status-success)' }}>
+          <div style={{ fontSize: '20px', fontWeight: 700, fontFamily: 'var(--font-typewriter)', marginTop: '4px', color: '#86EFAC' }}>
             {results.tracking_confidence.toFixed(1)}%
           </div>
         </div>

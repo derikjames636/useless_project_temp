@@ -8,14 +8,17 @@ interface OverallScoreRingProps {
 
 export const OverallScoreRing: React.FC<OverallScoreRingProps> = ({
   score = 87,
-  title = 'TECHNIQUE SCORE',
-  subtitle = 'Excellent Gyroscopic Stability & Control',
+  title = 'ASSIGNMENT GRADE',
+  subtitle = 'Teacher evaluation based on angular momentum & wobble stability.',
 }) => {
   const radius = 64;
   const strokeWidth = 10;
   const normalizedRadius = radius - strokeWidth / 2;
   const circumference = normalizedRadius * 2 * Math.PI;
   const strokeDashoffset = circumference - (score / 100) * circumference;
+
+  const letterGrade =
+    score >= 90 ? 'A+' : score >= 80 ? 'A' : score >= 70 ? 'B' : score >= 60 ? 'C' : 'F';
 
   return (
     <div className="telemetry-card" style={{
@@ -28,28 +31,19 @@ export const OverallScoreRing: React.FC<OverallScoreRingProps> = ({
       position: 'relative',
       overflow: 'hidden',
     }}>
-      {/* Background glow */}
+      {/* Title */}
       <div style={{
-        position: 'absolute',
-        width: '180px',
-        height: '180px',
-        borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(36, 136, 255, 0.08) 0%, rgba(192, 38, 255, 0.03) 70%, transparent 100%)',
-        pointerEvents: 'none',
-      }} />
-
-      <div style={{
-        fontSize: '11px',
+        fontSize: '12px',
         fontWeight: 700,
         letterSpacing: '0.08em',
-        color: 'var(--text-muted)',
+        color: 'var(--chalk-yellow)',
         marginBottom: '16px',
-        fontFamily: 'var(--font-mono)',
+        fontFamily: 'var(--font-typewriter)',
       }}>
-        {title}
+        {title} 📝
       </div>
 
-      {/* SVG Circular Progress Ring */}
+      {/* Chalk / Red Pen Circular Gauge */}
       <div style={{ position: 'relative', width: radius * 2, height: radius * 2 }}>
         <svg
           height={radius * 2}
@@ -58,23 +52,16 @@ export const OverallScoreRing: React.FC<OverallScoreRingProps> = ({
         >
           {/* Background track */}
           <circle
-            stroke="var(--border-subtle)"
+            stroke="rgba(255, 255, 255, 0.12)"
             fill="transparent"
             strokeWidth={strokeWidth}
             r={normalizedRadius}
             cx={radius}
             cy={radius}
           />
-          {/* Progress bar gradient */}
-          <defs>
-            <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#00FF88" />
-              <stop offset="50%" stopColor="#00F0FF" />
-              <stop offset="100%" stopColor="#C084FC" />
-            </linearGradient>
-          </defs>
+          {/* Progress bar */}
           <circle
-            stroke="url(#scoreGradient)"
+            stroke="#FEF08A"
             fill="transparent"
             strokeWidth={strokeWidth}
             strokeDasharray={`${circumference} ${circumference}`}
@@ -86,7 +73,7 @@ export const OverallScoreRing: React.FC<OverallScoreRingProps> = ({
           />
         </svg>
 
-        {/* Center Score readout */}
+        {/* Center Score readout in Chalk Style */}
         <div style={{
           position: 'absolute',
           inset: 0,
@@ -96,42 +83,45 @@ export const OverallScoreRing: React.FC<OverallScoreRingProps> = ({
           justifyContent: 'center',
         }}>
           <div style={{
-            fontSize: '38px',
-            fontWeight: 800,
+            fontSize: '36px',
+            fontWeight: 700,
             lineHeight: 1,
-            color: 'var(--text-primary)',
-            fontFamily: 'var(--font-mono)',
-            letterSpacing: '-0.04em',
+            color: 'var(--chalk-white)',
+            fontFamily: 'var(--font-chalk)',
+            textShadow: '0 0 4px rgba(255, 255, 255, 0.7)',
           }}>
             {score}
           </div>
           <div style={{
             fontSize: '12px',
-            color: 'var(--text-secondary)',
+            color: 'var(--chalk-yellow)',
+            fontFamily: 'var(--font-typewriter)',
             marginTop: '2px',
-            fontFamily: 'var(--font-mono)',
           }}>
             / 100
           </div>
         </div>
       </div>
 
-      {/* Descriptive rating tag */}
+      {/* Teacher's Red Ink Grade Stamp */}
       <div style={{
         marginTop: '16px',
-        fontSize: '13px',
-        fontWeight: 700,
-        fontFamily: 'var(--font-mono)',
-        color: score >= 80 ? 'var(--status-success)' : score >= 60 ? '#FEF08A' : 'var(--teacher-red)',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
       }}>
-        {score >= 85 ? 'GRADE: A+ (CHALKBOARD MASTER 🍎)' : score >= 70 ? 'GRADE: B (SOLID KNUCKLE ORBIT 👍)' : score >= 50 ? 'GRADE: C (DESK WOBBLE DETECTED 😐)' : 'GRADE: F (CLATTERED ON FLOOR 🚨)'}
+        <div className={`teacher-stamp ${score >= 70 ? 'approved' : ''}`} style={{ fontSize: '15px' }}>
+          GRADE: {letterGrade} {score >= 80 ? '🍎' : '⚠️'}
+        </div>
       </div>
 
       <div style={{
-        fontSize: '12px',
+        fontSize: '13px',
+        fontFamily: 'var(--font-handwriting)',
         color: 'var(--text-secondary)',
-        marginTop: '4px',
-        maxWidth: '220px',
+        marginTop: '8px',
+        maxWidth: '240px',
+        lineHeight: 1.4,
       }}>
         {subtitle}
       </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Upload, Play, Activity, ArrowRight, Zap, Target } from 'lucide-react';
+import { Upload, Play, ArrowRight, Zap, Target, BookOpen, Bell } from 'lucide-react';
 
 interface HomePageProps {
   onStartUpload: () => void;
@@ -11,61 +11,79 @@ export const HomePage: React.FC<HomePageProps> = ({ onStartUpload, onLoadSample 
     <div style={{
       maxWidth: '1100px',
       margin: '0 auto',
-      padding: '48px 24px',
+      padding: '40px 24px',
       display: 'flex',
       flexDirection: 'column',
-      gap: '48px',
+      gap: '40px',
     }}>
-      {/* Hero Section */}
-      <div style={{
+      {/* Chalkboard Hero Section with Wooden Frame */}
+      <div className="chalkboard-frame" style={{
+        padding: '48px 36px 36px 36px',
         textAlign: 'center',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: '20px',
+        gap: '22px',
         position: 'relative',
       }}>
-        {/* Glow pill */}
+        {/* Sticky Note on Corner */}
+        <div className="post-it-note" style={{
+          position: 'absolute',
+          top: '20px',
+          right: '24px',
+          maxWidth: '190px',
+          textAlign: 'left',
+          fontSize: '13px',
+          lineHeight: '1.3',
+          zIndex: 10,
+          display: 'none', // Shown via media query or inline on desktop
+        }}>
+          <strong>📌 Hall Pass Rule:</strong><br />
+          If pen drops during class, 10 minutes detention with Mr. Henderson.
+        </div>
+
+        {/* Vintage Chalk Badge */}
         <div style={{
           display: 'inline-flex',
           alignItems: 'center',
           gap: '8px',
-          padding: '6px 14px',
+          padding: '6px 16px',
           borderRadius: '6px',
           backgroundColor: 'rgba(254, 240, 138, 0.12)',
-          border: '1px dashed rgba(254, 240, 138, 0.3)',
-          color: '#FEF08A',
-          fontSize: '12px',
-          fontFamily: 'var(--font-mono)',
+          border: '1px dashed #FEF08A',
+          color: 'var(--chalk-yellow)',
+          fontSize: '13px',
+          fontFamily: 'var(--font-typewriter)',
           fontWeight: 700,
+          letterSpacing: '0.04em',
         }}>
-          <span style={{ fontSize: '14px' }}>✏️</span>
+          <Bell size={14} color="#FEF08A" />
           PERIOD 3: BACKBENCHER PHYSICS TELEMETRY LAB
         </div>
 
         <h1 style={{
-          fontSize: 'clamp(38px, 5.5vw, 64px)',
-          fontWeight: 800,
-          letterSpacing: '-0.04em',
-          lineHeight: 1.08,
+          fontSize: 'clamp(36px, 5vw, 58px)',
+          fontWeight: 700,
+          letterSpacing: '-0.02em',
+          lineHeight: 1.15,
           maxWidth: '850px',
-          background: 'linear-gradient(180deg, #FFFFFF 0%, #A7F3D0 60%, #38BDF8 100%)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          filter: 'drop-shadow(0 0 30px rgba(0, 255, 136, 0.2))',
+          fontFamily: 'var(--font-chalk)',
+          color: 'var(--chalk-white)',
+          textShadow: '0 0 3px rgba(255, 255, 255, 0.9), 0 0 10px rgba(254, 240, 138, 0.4)',
         }}>
           Pen Flip Aura Calculator
         </h1>
 
         <p style={{
-          fontSize: '17px',
-          color: 'var(--text-secondary)',
-          maxWidth: '680px',
+          fontSize: '18px',
+          color: '#CBD5E1',
+          maxWidth: '720px',
           lineHeight: 1.6,
+          fontFamily: 'var(--font-handwriting)',
         }}>
-          POV: Back row of Period 3 Physics while the teacher is busy on the chalkboard. 
-          Upload your pen-spinning clip to run sub-pixel tracking, measure angular RPM, 
-          and calculate your official Classroom Aura score.
+          POV: Back row of Period 3 Physics while the teacher is writing equations on the green chalkboard. 
+          Drop your pen-spinning video on the desk to compute RPM velocity, knuckle axis center, 
+          and calculate your official Classroom Aura score!
         </p>
 
         {/* Action Buttons */}
@@ -74,8 +92,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onStartUpload, onLoadSample 
           flexWrap: 'wrap',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: '16px',
-          marginTop: '12px',
+          gap: '18px',
+          marginTop: '8px',
+          zIndex: 5,
         }}>
           <button
             className="btn-primary"
@@ -83,95 +102,150 @@ export const HomePage: React.FC<HomePageProps> = ({ onStartUpload, onLoadSample 
             style={{ padding: '16px 36px', fontSize: '15px' }}
           >
             <Upload size={18} />
-            <span>Slide Video Across Desk</span>
+            <span>Slide Homework Clip Across Desk</span>
             <ArrowRight size={18} />
           </button>
 
           <button
             className="btn-secondary"
             onClick={onLoadSample}
-            style={{ padding: '16px 24px', fontSize: '14px' }}
+            style={{ padding: '16px 26px', fontSize: '14px' }}
           >
             <Play size={16} color="#FEF08A" />
-            <span>Borrow Smart Kid's 240 FPS Demo</span>
+            <span>Borrow Smart Kid's 240 FPS Clip</span>
           </button>
+        </div>
+
+        {/* Chalk Tray at bottom of hero chalkboard */}
+        <div style={{
+          width: 'calc(100% + 72px)',
+          margin: '32px -36px -36px -36px',
+        }}>
+          <div className="chalk-tray">
+            <span style={{ fontSize: '10px', color: '#A07047', fontFamily: 'var(--font-typewriter)', marginRight: '8px' }}>
+              CHALK TRAY:
+            </span>
+            <div className="chalk-stick" style={{ background: '#FFFFFF' }} title="White Chalk" />
+            <div className="chalk-stick" style={{ background: '#FEF08A' }} title="Yellow Chalk" />
+            <div className="chalk-stick" style={{ background: '#86EFAC' }} title="Mint Chalk" />
+            <div className="chalk-stick" style={{ background: '#FDA4AF' }} title="Pink Chalk" />
+            <div style={{
+              marginLeft: 'auto',
+              width: '45px',
+              height: '12px',
+              background: '#2A170A',
+              border: '1px solid #5C3A21',
+              borderRadius: '2px',
+            }} title="Felt Eraser" />
+          </div>
         </div>
       </div>
 
-      {/* Feature Pillar Cards */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-        gap: '20px',
-        marginTop: '16px',
-      }}>
-        <div className="telemetry-card">
-          <div style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '8px',
-            backgroundColor: 'rgba(93, 226, 255, 0.12)',
-            color: 'var(--accent-blue)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: '16px',
-            border: '1px solid rgba(93, 226, 255, 0.25)',
+      {/* Feature Section: 3 Notebook Flashcards with ruled paper styling */}
+      <div>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          marginBottom: '16px',
+        }}>
+          <BookOpen size={18} color="#FEF08A" />
+          <span style={{
+            fontSize: '13px',
+            fontFamily: 'var(--font-typewriter)',
+            color: 'var(--chalk-yellow)',
+            letterSpacing: '0.06em',
+            fontWeight: 700,
           }}>
-            <Zap size={20} />
-          </div>
-          <h3 style={{ fontSize: '17px', fontWeight: 700, color: 'var(--text-primary)' }}>
-            Rotational Velocity (RPM)
-          </h3>
-          <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px', lineHeight: 1.5 }}>
-            Calculates high-velocity angular momentum and continuous rotation rate using sub-pixel coordinate tracking.
-          </p>
+            LAB NOTEBOOK · KINEMATIC RUBRIC
+          </span>
         </div>
 
-        <div className="telemetry-card">
-          <div style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '8px',
-            backgroundColor: 'rgba(90, 228, 168, 0.12)',
-            color: 'var(--status-success)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: '16px',
-            border: '1px solid rgba(90, 228, 168, 0.25)',
-          }}>
-            <Target size={20} />
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: '22px',
+        }}>
+          {/* Card 1: Ruled Notebook Paper */}
+          <div className="notebook-paper" style={{ transform: 'rotate(-0.5deg)' }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              marginBottom: '8px',
+            }}>
+              <Zap size={18} color="#B45309" />
+              <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#1E293B', fontFamily: 'var(--font-handwriting)' }}>
+                Angular Velocity (RPM)
+              </h3>
+            </div>
+            <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.5, margin: 0 }}>
+              Calculates continuous rotational velocity and peak cycles-per-second using sub-pixel knuckle tracking.
+            </p>
+            <div style={{
+              marginTop: '12px',
+              fontSize: '12px',
+              color: '#DC2626',
+              fontFamily: 'var(--font-chalk)',
+              fontWeight: 700,
+            }}>
+              ✓ Formula: ω = 2π × (rev / sec)
+            </div>
           </div>
-          <h3 style={{ fontSize: '17px', fontWeight: 700, color: 'var(--text-primary)' }}>
-            Finger Axis Accuracy
-          </h3>
-          <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px', lineHeight: 1.5 }}>
-            Tracks the geometric pivot point relative to knuckles to ensure the pen stays centered on your hand.
-          </p>
-        </div>
 
-        <div className="telemetry-card">
-          <div style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '8px',
-            backgroundColor: 'rgba(254, 240, 138, 0.12)',
-            color: '#FEF08A',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: '16px',
-            border: '1px solid rgba(254, 240, 138, 0.25)',
-          }}>
-            <Activity size={20} />
+          {/* Card 2: Ruled Notebook Paper */}
+          <div className="notebook-paper" style={{ transform: 'rotate(0.5deg)' }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              marginBottom: '8px',
+            }}>
+              <Target size={18} color="#047857" />
+              <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#1E293B', fontFamily: 'var(--font-handwriting)' }}>
+                Knuckle Pivot Accuracy
+              </h3>
+            </div>
+            <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.5, margin: 0 }}>
+              Tracks pen center-of-mass against your index & middle finger coordinates to guarantee seamless orbit.
+            </p>
+            <div style={{
+              marginTop: '12px',
+              fontSize: '12px',
+              color: '#DC2626',
+              fontFamily: 'var(--font-chalk)',
+              fontWeight: 700,
+            }}>
+              ✓ Tolerance: ≤ 4.2mm drift
+            </div>
           </div>
-          <h3 style={{ fontSize: '17px', fontWeight: 700, color: 'var(--text-primary)' }}>
-            Stability & Desk Clatter Risk
-          </h3>
-          <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px', lineHeight: 1.5 }}>
-            Quantifies orbital wobble and path deviations so your pen doesn't fly off the desk and alert the teacher.
-          </p>
+
+          {/* Card 3: Post-it / Yellow Sticky Style */}
+          <div className="post-it-note" style={{ transform: 'rotate(-1deg)' }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              marginBottom: '8px',
+            }}>
+              <span style={{ fontSize: '18px' }}>⚠️</span>
+              <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#1C1917', fontFamily: 'var(--font-handwriting)' }}>
+                Desk Clatter & Wobble
+              </h3>
+            </div>
+            <p style={{ fontSize: '14px', color: '#44403C', lineHeight: 1.5, margin: 0 }}>
+              Detects off-axis precession before the pen hits the wooden desk and turns the teacher around.
+            </p>
+            <div style={{
+              marginTop: '12px',
+              fontSize: '12px',
+              color: '#991B1B',
+              fontFamily: 'var(--font-typewriter)',
+              fontWeight: 700,
+            }}>
+              ⚠️ Clatter risk penalty: -150 Aura
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -91,12 +91,11 @@ export const UploadZone: React.FC<UploadZoneProps> = ({
           onDrop={handleDrop}
           onClick={() => fileInputRef.current?.click()}
           style={{
-            border: `2px dashed ${isDragOver ? '#00FF88' : 'rgba(0, 255, 136, 0.25)'}`,
-            backgroundColor: isDragOver ? 'rgba(0, 255, 136, 0.08)' : 'var(--bg-card)',
-            boxShadow: isDragOver ? '0 0 30px rgba(0, 255, 136, 0.2)' : '0 8px 32px rgba(0, 0, 0, 0.4)',
-            backdropFilter: 'blur(12px)',
-            borderRadius: '16px',
-            padding: '60px 32px',
+            border: `3px dashed ${isDragOver ? '#FEF08A' : 'rgba(254, 240, 138, 0.4)'}`,
+            backgroundColor: isDragOver ? 'rgba(254, 240, 138, 0.08)' : 'rgba(24, 40, 31, 0.95)',
+            boxShadow: isDragOver ? '0 0 30px rgba(254, 240, 138, 0.25)' : '0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.4)',
+            borderRadius: '12px',
+            padding: '56px 32px',
             textAlign: 'center',
             cursor: 'pointer',
             transition: 'all 0.2s ease',
@@ -104,6 +103,7 @@ export const UploadZone: React.FC<UploadZoneProps> = ({
             flexDirection: 'column',
             alignItems: 'center',
             gap: '16px',
+            position: 'relative',
           }}
         >
           <input
@@ -119,45 +119,52 @@ export const UploadZone: React.FC<UploadZoneProps> = ({
           />
 
           <div style={{
-            width: '64px',
-            height: '64px',
-            borderRadius: '14px',
-            backgroundColor: 'rgba(0, 255, 136, 0.1)',
-            border: '1px solid rgba(0, 255, 136, 0.3)',
+            width: '68px',
+            height: '68px',
+            borderRadius: '12px',
+            backgroundColor: '#351E0E',
+            border: '2px solid #704727',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: '#00FF88',
-            boxShadow: '0 0 16px rgba(0, 255, 136, 0.15)',
+            color: 'var(--chalk-yellow)',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.4)',
           }}>
-            <Upload size={28} />
+            <Upload size={30} />
           </div>
 
           <div>
-            <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+            <h3 style={{
+              fontSize: '22px',
+              fontWeight: 700,
+              color: 'var(--chalk-white)',
+              fontFamily: 'var(--font-chalk)',
+              letterSpacing: '0.02em',
+              textShadow: '0 0 2px rgba(255, 255, 255, 0.8)',
+            }}>
               SLIDE PEN FLIP FOOTAGE ACROSS DESK 🪑
             </h3>
-            <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-              or click to pick video from device (MP4, MOV, WebM)
+            <p style={{ fontSize: '15px', color: '#CBD5E1', fontFamily: 'var(--font-handwriting)', marginTop: '4px' }}>
+              Drop your video assignment here or click to browse files (MP4, MOV, WebM)
             </p>
           </div>
 
           <div style={{
             fontSize: '12px',
-            fontFamily: 'var(--font-mono)',
+            fontFamily: 'var(--font-typewriter)',
             color: '#FEF08A',
             letterSpacing: '0.05em',
             padding: '6px 14px',
-            borderRadius: '6px',
+            borderRadius: '4px',
             backgroundColor: 'rgba(254, 240, 138, 0.08)',
-            border: '1px dashed rgba(254, 240, 138, 0.3)',
+            border: '1px dashed #FEF08A',
           }}>
-            DESK TELEMETRY LAB · MP4 / MOV / WEBM (120 FPS / 240 FPS RECOMMENDED)
+            BACKBENCHER DESK LAB · 120 FPS / 240 FPS SLOW-MO HIGHLY RECOMMENDED
           </div>
 
           {extractingMetadata && (
-            <div style={{ fontSize: '13px', color: 'var(--accent-blue)', marginTop: '8px' }}>
-              Extracting video metadata & frame parameters...
+            <div style={{ fontSize: '14px', color: 'var(--chalk-yellow)', fontFamily: 'var(--font-handwriting)', marginTop: '8px' }}>
+              Reading frames from pencil box...
             </div>
           )}
         </div>

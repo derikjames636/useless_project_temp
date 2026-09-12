@@ -1,57 +1,73 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Kalam:wght@400;700&family=Patrick+Hand&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Special+Elite&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Techno-Classroom Slate & Neon Chalkboard Theme */
-  --bg-primary: #0A0F0D;
-  --bg-secondary: #111A16;
-  --bg-card: rgba(18, 28, 23, 0.75);
-  --bg-card-hover: rgba(26, 42, 34, 0.85);
-  --border-subtle: rgba(90, 228, 168, 0.15);
-  --border-focus: #00FF88;
+  /* Traditional Classroom Palette: Green Chalkboard, Warm Oak Wood, Paper, Chalk */
+  --bg-primary: #152219;
+  --bg-chalkboard: #1C2E24;
+  --bg-chalkboard-dark: #121D16;
+  --bg-wood: #4E3019;
+  --bg-wood-dark: #38210F;
+  --bg-wood-light: #704727;
+  --bg-paper: #FAF7EE;
+  --bg-paper-dark: #F3EEDB;
+  --bg-sticky-yellow: #FEF08A;
+  --bg-sticky-pink: #FED7AA;
 
-  --text-primary: #F0FDF4;
-  --text-secondary: #94A3B8;
-  --text-muted: #4B6358;
+  /* Card & Border tokens */
+  --bg-card: rgba(24, 40, 31, 0.88);
+  --bg-card-hover: rgba(30, 52, 40, 0.95);
+  --border-chalk: rgba(248, 250, 252, 0.22);
+  --border-subtle: rgba(248, 250, 252, 0.15);
+  --border-wood: #5C3A21;
+  --border-focus: #FEF08A;
 
-  --accent-cyan: #00F0FF;
-  --accent-cyan-dim: rgba(0, 240, 255, 0.15);
-  --accent-green: #00FF88;
-  --accent-green-dim: rgba(0, 255, 136, 0.15);
-  --accent-blue: #38BDF8;
-  --accent-blue-dim: rgba(56, 189, 248, 0.15);
-  --accent-purple: #C084FC;
-  --accent-purple-dim: rgba(192, 132, 252, 0.15);
-  --accent-pink: #F43F5E;
-  --accent-pink-dim: rgba(244, 63, 94, 0.15);
+  /* Text colors */
+  --text-primary: #F8FAFC;
+  --text-chalk: #F1F5F9;
+  --text-secondary: #CBD5E1;
+  --text-muted: #809689;
+  --text-paper: #1E293B;
+
+  /* Chalk hues */
+  --chalk-white: #FFFFFF;
+  --chalk-yellow: #FEF08A;
+  --chalk-green: #86EFAC;
+  --chalk-blue: #93C5FD;
+  --chalk-pink: #FDA4AF;
+  --chalk-orange: #FDBA74;
+
+  /* Accent & Teacher's Red Pen */
+  --teacher-red: #DC2626;
+  --teacher-red-bg: rgba(220, 38, 38, 0.15);
+  --accent-cyan: #38BDF8;
+  --accent-green: #4ADE80;
   --accent-yellow: #FACC15;
-  --accent-yellow-dim: rgba(250, 204, 21, 0.15);
+  --accent-pink: #FB7185;
+  --accent-blue: #60A5FA;
 
-  --status-success: #00FF88;
-  --status-success-dim: rgba(0, 255, 136, 0.15);
+  /* Status Colors */
+  --status-success: #4ADE80;
   --status-warning: #FACC15;
-  --status-warning-dim: rgba(250, 204, 21, 0.15);
-  --status-danger: #FF3366;
-  --status-danger-dim: rgba(255, 51, 102, 0.15);
+  --status-danger: #EF4444;
 
-  --teacher-red: #FF3366;
-  --chalk-glow: #00FF88;
-  --chalk-yellow: #FACC15;
-  --chalk-cyan: #00F0FF;
-
-  --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-display: 'Space Grotesk', sans-serif;
+  /* Fonts */
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-chalk: 'Caveat', 'Patrick Hand', cursive;
+  --font-handwriting: 'Kalam', 'Caveat', cursive;
+  --font-typewriter: 'Special Elite', 'JetBrains Mono', monospace;
   --font-mono: 'JetBrains Mono', monospace;
 }
 
-/* Techno-Chalkboard Grid with Scanlines & Radial Ambient Light */
+/* Base Body: Traditional Dark Green Chalkboard with Chalk Dust Grain */
 body {
   background-color: var(--bg-primary);
   background-image: 
-    radial-gradient(ellipse at 50% 0%, rgba(0, 255, 136, 0.12) 0%, transparent 60%),
-    radial-gradient(circle at 100% 50%, rgba(0, 240, 255, 0.05) 0%, transparent 40%),
-    linear-gradient(rgba(0, 255, 136, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 255, 136, 0.035) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px;
+    radial-gradient(ellipse at 50% 15%, rgba(40, 68, 52, 0.6) 0%, transparent 75%),
+    radial-gradient(circle at 10% 90%, rgba(254, 240, 138, 0.04) 0%, transparent 30%),
+    radial-gradient(circle at 90% 10%, rgba(255, 255, 255, 0.03) 0%, transparent 30%),
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
   color: var(--text-primary);
   font-family: var(--font-sans);
   min-height: 100vh;
@@ -61,48 +77,173 @@ body {
   overflow-x: hidden;
 }
 
-/* Teacher Grading Red Stamp */
-.teacher-stamp {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 12px;
-  border: 2px solid var(--teacher-red);
+/* Chalk Text Effect */
+.chalk-text {
+  font-family: var(--font-chalk);
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.7), 0 0 4px rgba(255, 255, 255, 0.2);
+}
+
+.chalk-title {
+  font-family: var(--font-chalk);
+  font-weight: 700;
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.8), 0 0 8px rgba(254, 240, 138, 0.3);
+}
+
+/* Traditional Framed Chalkboard Container */
+.chalkboard-frame {
+  background-color: var(--bg-chalkboard);
+  border: 10px solid #55341D;
+  outline: 2px solid #2C180A;
+  border-radius: 10px;
+  box-shadow: 
+    0 12px 36px rgba(0, 0, 0, 0.65), 
+    inset 0 0 30px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Wood frame with subtle grain gradient */
+.wood-trim {
+  background: linear-gradient(180deg, #684124 0%, #4D2D15 100%);
+  border: 1px solid #7E512F;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Traditional Classroom Card / Slate */
+.telemetry-card {
+  background-color: var(--bg-card);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid var(--border-chalk);
+  border-radius: 12px;
+  padding: 22px;
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.45), 
+    inset 0 0 16px rgba(0, 0, 0, 0.4);
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.telemetry-card:hover {
+  background-color: var(--bg-card-hover);
+  border-color: rgba(254, 240, 138, 0.45);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55), 0 0 12px rgba(254, 240, 138, 0.12);
+  transform: translateY(-2px);
+}
+
+/* Lined Notebook Paper Card (Yellow Legal Pad / School Notebook) */
+.notebook-paper {
+  background-color: var(--bg-paper);
+  background-image: 
+    linear-gradient(90deg, transparent 46px, #F87171 46px, #F87171 48px, transparent 48px),
+    repeating-linear-gradient(transparent, transparent 27px, #BFDBFE 27px, #BFDBFE 28px);
+  color: var(--text-paper);
+  padding: 24px 24px 24px 60px;
   border-radius: 6px;
-  color: var(--teacher-red);
-  font-family: var(--font-mono);
-  font-weight: 800;
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  transform: rotate(-2deg);
-  box-shadow: 0 0 10px rgba(255, 71, 87, 0.2);
-  user-select: none;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.4),
+    0 1px 4px rgba(0, 0, 0, 0.2);
+  position: relative;
+  font-family: var(--font-handwriting);
 }
 
-.teacher-stamp.approved {
-  border-color: #5AE4A8;
-  color: #5AE4A8;
-  box-shadow: 0 0 10px rgba(90, 228, 168, 0.2);
-  transform: rotate(1.5deg);
+.notebook-paper::before {
+  /* Paper clip at top left */
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 32px;
+  width: 14px;
+  height: 32px;
+  border: 3px solid #94A3B8;
+  border-radius: 8px;
+  background: transparent;
+  box-shadow: 1px 2px 4px rgba(0,0,0,0.3);
+  z-index: 2;
 }
 
-/* Post-it Note Accent Card */
+/* Post-it Sticky Note with washi tape */
 .post-it-note {
-  background: #FEF08A;
+  background: var(--bg-sticky-yellow);
   color: #1C1917;
-  padding: 16px 20px;
-  border-radius: 4px;
-  box-shadow: 2px 4px 14px rgba(0, 0, 0, 0.4);
-  transform: rotate(-1deg);
-  transition: transform 0.2s ease;
+  padding: 18px 20px;
+  border-radius: 2px;
+  box-shadow: 
+    2px 8px 20px rgba(0, 0, 0, 0.35),
+    inset 0 -20px 40px rgba(0, 0, 0, 0.05);
+  transform: rotate(-1.5deg);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  font-family: var(--font-handwriting);
+}
+
+.post-it-note::before {
+  /* Scotch tape holding the sticky note */
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 35%;
+  width: 30%;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(2px);
+  transform: rotate(1deg);
+  border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 .post-it-note:hover {
   transform: rotate(0deg) scale(1.02);
+  box-shadow: 3px 12px 26px rgba(0, 0, 0, 0.45);
 }
 
-/* Chalk line underline */
+/* Teacher's Red Pen Exam Grade Stamp */
+.teacher-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border: 3px solid var(--teacher-red);
+  border-radius: 8px;
+  color: var(--teacher-red);
+  font-family: var(--font-typewriter);
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transform: rotate(-3deg);
+  box-shadow: 0 0 12px rgba(220, 38, 38, 0.25);
+  user-select: none;
+  background: rgba(220, 38, 38, 0.08);
+}
+
+.teacher-stamp.approved {
+  border-color: #16A34A;
+  color: #16A34A;
+  background: rgba(22, 163, 74, 0.08);
+  box-shadow: 0 0 12px rgba(22, 163, 74, 0.25);
+  transform: rotate(2deg);
+}
+
+/* Wooden Ruler Accent Bar */
+.ruler-bar {
+  height: 22px;
+  background: #C4975B;
+  border: 1px solid #8D6127;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: relative;
+  background-image: repeating-linear-gradient(
+    90deg,
+    #5C3A16 0px,
+    #5C3A16 1px,
+    transparent 1px,
+    transparent 8px
+  );
+}
+
+/* Chalk Underline */
 .chalk-underline {
   position: relative;
   display: inline-block;
@@ -111,53 +252,63 @@ body {
 .chalk-underline::after {
   content: '';
   position: absolute;
-  left: 0;
+  left: -2px;
+  right: -2px;
   bottom: -4px;
-  width: 100%;
   height: 3px;
-  background: currentColor;
+  background: var(--chalk-yellow);
   border-radius: 2px;
-  opacity: 0.6;
+  opacity: 0.85;
+  box-shadow: 0 0 4px rgba(254, 240, 138, 0.4);
 }
 
-.sticker-badge {
-  display: inline-flex;
+/* Chalk Dust Tray at bottom of Chalkboard */
+.chalk-tray {
+  height: 18px;
+  background: linear-gradient(180deg, #4A2E19 0%, #2A170A 100%);
+  border-top: 2px solid #6E4527;
+  border-bottom: 2px solid #1C0F06;
+  display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 4px 10px;
-  border-radius: 9999px;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  font-family: var(--font-mono);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  transition: transform 0.15s ease;
+  padding: 0 20px;
+  gap: 12px;
 }
 
-.sticker-badge:hover {
-  transform: scale(1.06) rotate(-2deg);
+.chalk-stick {
+  width: 32px;
+  height: 8px;
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+  background: var(--bg-chalkboard-dark);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border-subtle);
+  background: #4E3019;
+  border: 1px solid #684124;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+  background: #684124;
 }
 
 /* Typography Utilities */
 .font-mono {
   font-family: var(--font-mono);
+}
+
+.font-typewriter {
+  font-family: var(--font-typewriter);
+}
+
+.font-chalk {
+  font-family: var(--font-chalk);
 }
 
 .text-metric {
@@ -167,94 +318,51 @@ body {
   line-height: 1;
 }
 
-/* Card Utilities - Techno Chalkboard Slate */
-.telemetry-card {
-  background-color: var(--bg-card);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  padding: 22px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  position: relative;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow: hidden;
-}
-
-.telemetry-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.4), transparent);
-  opacity: 0.5;
-}
-
-.telemetry-card:hover {
-  background-color: var(--bg-card-hover);
-  border-color: rgba(0, 255, 136, 0.35);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 18px rgba(0, 255, 136, 0.12);
-  transform: translateY(-2px);
-}
-
 /* Status Pills */
 .status-pill {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 4px 12px;
+  padding: 5px 12px;
   border-radius: 6px;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  font-family: var(--font-mono);
+  font-family: var(--font-typewriter);
 }
 
 .status-pill.tracking {
-  background: rgba(0, 255, 136, 0.12);
-  color: #00FF88;
-  border: 1px solid rgba(0, 255, 136, 0.4);
-  box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+  background: rgba(74, 222, 128, 0.15);
+  color: #86EFAC;
+  border: 1px solid rgba(74, 222, 128, 0.4);
 }
 
 .status-pill.calibrating {
-  background: rgba(0, 240, 255, 0.12);
-  color: #00F0FF;
-  border: 1px solid rgba(0, 240, 255, 0.4);
-  box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
-}
-
-.status-pill.occluded,
-.status-pill.low-confidence {
-  background: rgba(250, 204, 21, 0.12);
-  color: #FACC15;
-  border: 1px solid rgba(250, 204, 21, 0.4);
-  box-shadow: 0 0 10px rgba(250, 204, 21, 0.2);
+  background: rgba(254, 240, 138, 0.15);
+  color: #FEF08A;
+  border: 1px solid rgba(254, 240, 138, 0.4);
 }
 
 .status-pill.lost {
-  background: rgba(255, 51, 102, 0.12);
-  color: #FF3366;
-  border: 1px solid rgba(255, 51, 102, 0.4);
-  box-shadow: 0 0 10px rgba(255, 51, 102, 0.2);
+  background: rgba(239, 68, 68, 0.15);
+  color: #FCA5A5;
+  border: 1px solid rgba(239, 68, 68, 0.4);
 }
 
-/* Glow Dot indicator */
+/* Indicator dot */
 .indicator-dot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background-color: currentColor;
-  box-shadow: 0 0 10px currentColor;
-  animation: pulse-subtle 1.8s infinite ease-in-out;
+  box-shadow: 0 0 6px currentColor;
+  animation: pulse-subtle 2s infinite ease-in-out;
 }
 
 @keyframes pulse-subtle {
-  0%, 100% { opacity: 1; transform: scale(1); filter: brightness(1.2); }
-  50% { opacity: 0.4; transform: scale(0.8); filter: brightness(0.8); }
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
 }
 
 /* Buttons */
@@ -263,24 +371,23 @@ body {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  background: linear-gradient(135deg, #00FF88 0%, #00F0FF 100%);
-  color: #041009;
-  border: none;
+  background: linear-gradient(180deg, #FEF08A 0%, #FACC15 100%);
+  color: #1A1805;
+  border: 2px solid #CA8A04;
   border-radius: 8px;
-  padding: 14px 28px;
+  padding: 13px 28px;
   font-size: 15px;
   font-weight: 700;
   font-family: var(--font-sans);
   cursor: pointer;
-  transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.2s ease;
-  box-shadow: 0 4px 20px rgba(0, 255, 136, 0.35);
-  letter-spacing: -0.01em;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 .btn-primary:hover:not(:disabled) {
-  filter: brightness(1.1);
+  filter: brightness(1.05);
   transform: translateY(-2px);
-  box-shadow: 0 6px 26px rgba(0, 255, 136, 0.55), 0 0 16px rgba(0, 240, 255, 0.4);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), 0 0 10px rgba(254, 240, 138, 0.3);
 }
 
 .btn-primary:disabled {
@@ -294,10 +401,9 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background-color: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(8px);
-  color: var(--text-secondary);
-  border: 1px solid var(--border-subtle);
+  background: linear-gradient(180deg, #3A2312 0%, #29170A 100%);
+  color: var(--chalk-yellow);
+  border: 2px solid #5C3A21;
   border-radius: 8px;
   padding: 12px 20px;
   font-size: 14px;
@@ -305,13 +411,15 @@ body {
   font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
 }
 
 .btn-secondary:hover {
-  background-color: rgba(0, 255, 136, 0.08);
-  color: var(--text-primary);
-  border-color: rgba(0, 255, 136, 0.35);
-  box-shadow: 0 0 14px rgba(0, 255, 136, 0.15);
+  background: linear-gradient(180deg, #4A2E19 0%, #351E0E 100%);
+  border-color: var(--chalk-yellow);
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transform: translateY(-1px);
 }
 
 /* Animations */
@@ -324,70 +432,13 @@ body {
   animation: fadeIn 0.3s ease-out forwards;
 }
 
-/* Quirky Gen-Z Thermal Receipt Styling */
-.thermal-receipt {
-  background: #FDFBF7;
-  color: #1A1A1A;
-  font-family: 'JetBrains Mono', monospace;
-  padding: 24px 20px;
-  border-radius: 4px;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1);
-  position: relative;
-  max-width: 360px;
-  margin: 0 auto;
-  transform: rotate(-0.5deg);
-  transition: transform 0.2s ease;
-}
-
-.thermal-receipt:hover {
-  transform: rotate(0deg) scale(1.02);
-}
-
-.thermal-receipt::before {
-  content: '';
-  position: absolute;
-  top: -6px;
-  left: 0;
-  right: 0;
-  height: 6px;
-  background: radial-gradient(circle, transparent, transparent 50%, #FDFBF7 50%, #FDFBF7 100%);
-  background-size: 12px 12px;
-}
-
-.thermal-receipt::after {
-  content: '';
-  position: absolute;
-  bottom: -6px;
-  left: 0;
-  right: 0;
-  height: 6px;
-  background: radial-gradient(circle, transparent, transparent 50%, #FDFBF7 50%, #FDFBF7 100%);
-  background-size: 12px 12px;
-}
-
-/* Quirky Gen-Z reaction pill */
-.reaction-button {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--border-subtle);
-  border-radius: 9999px;
-  padding: 6px 14px;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text-primary);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
-  user-select: none;
-}
-
-.reaction-button:hover {
-  background: rgba(255, 255, 255, 0.12);
-  transform: scale(1.1) translateY(-2px);
-  border-color: var(--accent-pink);
-}
-
-.reaction-button:active {
-  transform: scale(0.95);
+/* Teacher Report Card Modal / Box */
+.report-card-container {
+  background: #FAF7EE;
+  color: #1E293B;
+  border: 3px double #94A3B8;
+  border-radius: 6px;
+  padding: 24px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  font-family: var(--font-typewriter);
 }
