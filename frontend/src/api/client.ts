@@ -5,7 +5,7 @@ import type {
 } from '../types/analysis';
 import { MOCK_ANALYSIS_COMPLETED, MOCK_TRAJECTORY } from './mockData';
 
-const API_BASE = '/api';
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 export class ApiService {
   private useMockFallback: boolean = false;
