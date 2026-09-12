@@ -1,6 +1,6 @@
 import React from 'react';
 import type { AnalysisResults } from '../types/analysis';
-import { Zap, Target, Waves, Gauge, Activity, Compass, ShieldCheck } from 'lucide-react';
+import { Zap, Target, Waves, Gauge, Activity, Compass, ShieldCheck, Sparkles } from 'lucide-react';
 
 interface MetricCardsProps {
   results: AnalysisResults;
@@ -18,10 +18,10 @@ export const MetricCards: React.FC<MetricCardsProps> = ({ results }) => {
         {/* RPM Card */}
         <div className="telemetry-card" style={{ position: 'relative' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-              ROTATIONAL SPEED
+            <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
+              ANGULAR SPEED (RPM) ✏️
             </span>
-            <div style={{ padding: '6px', borderRadius: '8px', backgroundColor: 'var(--accent-blue-dim)', color: 'var(--accent-blue)' }}>
+            <div style={{ padding: '6px', borderRadius: '8px', backgroundColor: 'rgba(93, 226, 255, 0.12)', color: 'var(--accent-blue)' }}>
               <Zap size={16} />
             </div>
           </div>
@@ -46,23 +46,23 @@ export const MetricCards: React.FC<MetricCardsProps> = ({ results }) => {
             <span style={{
               padding: '2px 6px',
               borderRadius: '4px',
-              backgroundColor: 'rgba(54, 226, 160, 0.1)',
+              backgroundColor: 'rgba(90, 228, 168, 0.12)',
               fontFamily: 'var(--font-mono)',
-              fontWeight: 600,
+              fontWeight: 700,
             }}>
-              PEAK SPIN
+              PEAK VELOCITY
             </span>
-            <span style={{ color: 'var(--text-muted)' }}>Continuous angular velocity</span>
+            <span style={{ color: 'var(--text-secondary)' }}>Continuous angular momentum</span>
           </div>
         </div>
 
         {/* Center Accuracy Card */}
         <div className="telemetry-card" style={{ position: 'relative' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-              CENTER ACCURACY
+            <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
+              KNUCKLE AXIS PRECISION 🎯
             </span>
-            <div style={{ padding: '6px', borderRadius: '8px', backgroundColor: 'rgba(54, 226, 160, 0.1)', color: 'var(--status-success)' }}>
+            <div style={{ padding: '6px', borderRadius: '8px', backgroundColor: 'rgba(90, 228, 168, 0.12)', color: 'var(--status-success)' }}>
               <Target size={16} />
             </div>
           </div>
@@ -83,30 +83,30 @@ export const MetricCards: React.FC<MetricCardsProps> = ({ results }) => {
             <span style={{
               padding: '2px 6px',
               borderRadius: '4px',
-              backgroundColor: 'rgba(54, 226, 160, 0.1)',
+              backgroundColor: 'rgba(90, 228, 168, 0.12)',
               color: 'var(--status-success)',
               fontFamily: 'var(--font-mono)',
-              fontWeight: 600,
+              fontWeight: 700,
             }}>
-              EXCELLENT
+              BALANCED
             </span>
-            <span style={{ color: 'var(--text-muted)' }}>Finger axis deviation &lt; 5%</span>
+            <span style={{ color: 'var(--text-secondary)' }}>Finger pivot offset &lt; 5%</span>
           </div>
         </div>
 
         {/* Wobble Card */}
         <div className="telemetry-card" style={{ position: 'relative' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-              SPIN STABILITY (WOBBLE)
+            <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
+              DESK CLATTER STABILITY 🌊
             </span>
-            <div style={{ padding: '6px', borderRadius: '8px', backgroundColor: 'var(--accent-purple-dim)', color: 'var(--accent-purple)' }}>
+            <div style={{ padding: '6px', borderRadius: '8px', backgroundColor: 'rgba(254, 240, 138, 0.12)', color: '#FEF08A' }}>
               <Waves size={16} />
             </div>
           </div>
 
           <div style={{ marginTop: '12px' }}>
-            <div className="text-metric" style={{ color: 'var(--accent-purple)', fontFamily: 'var(--font-mono)' }}>
+            <div className="text-metric" style={{ color: '#FEF08A', fontFamily: 'var(--font-mono)' }}>
               {results.wobble_percent.toFixed(1)}%
             </div>
           </div>
@@ -121,14 +121,14 @@ export const MetricCards: React.FC<MetricCardsProps> = ({ results }) => {
             <span style={{
               padding: '2px 6px',
               borderRadius: '4px',
-              backgroundColor: 'rgba(192, 38, 255, 0.1)',
-              color: 'var(--accent-purple)',
+              backgroundColor: 'rgba(254, 240, 138, 0.12)',
+              color: '#FEF08A',
               fontFamily: 'var(--font-mono)',
-              fontWeight: 600,
+              fontWeight: 700,
             }}>
-              STABLE
+              SILENT SPIN
             </span>
-            <span style={{ color: 'var(--text-muted)' }}>RMS deviation: 2.4 px</span>
+            <span style={{ color: 'var(--text-secondary)' }}>RMS path variance: 2.4 px</span>
           </div>
         </div>
       </div>
@@ -139,6 +139,18 @@ export const MetricCards: React.FC<MetricCardsProps> = ({ results }) => {
         gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
         gap: '12px',
       }}>
+        {results.aura_score !== undefined && (
+          <div style={{ background: 'linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%)', border: '1px solid rgba(168, 85, 247, 0.3)', borderRadius: '10px', padding: '14px 18px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#C084FC', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
+              <Sparkles size={13} color="#E879F9" />
+              <span>AURA SCORE</span>
+            </div>
+            <div style={{ fontSize: '20px', fontWeight: 800, fontFamily: 'var(--font-mono)', marginTop: '4px', color: '#F472B6' }}>
+              {results.aura_score.toLocaleString()} <span style={{ fontSize: '12px', color: '#C084FC' }}>pts</span>
+            </div>
+          </div>
+        )}
+
         <div style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-subtle)', borderRadius: '10px', padding: '14px 18px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
             <Gauge size={13} />

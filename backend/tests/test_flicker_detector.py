@@ -10,14 +10,16 @@ from app.services.result_service import aggregate_results
 
 
 def test_detect_flicker_empty_input():
-    score, is_flicker, verdict = detect_flicker([], [], (100, 100))
-    assert score == 0.0
-    assert is_flicker is False
-    assert "INCOMPLETE: Insufficient rotation" in verdict
+    result = detect_flicker([], [], (100, 100))
+    assert isinstance(result, dict)
+    assert result["score"] == 0.0
+    assert result["is_fake_flicker"] is True
+    assert "FAIL: Insufficient net rotation" in result["verdict"]
+    assert result["aura_score"] == 0
 
 
 def test_detect_flicker_clean_rotation():
-    """Simulate a continuous 360-degree rotation around (100, 100) -> Should trigger EXCELLENT (score 100.0)."""
+    """Simulate a continuous 360-degree rotation around (100, 100) -> Should trigger PERFECT (score 100.0)."""
     center = (100.0, 100.0)
     radius = 50.0
     num_frames = 35
@@ -32,14 +34,15 @@ def test_detect_flicker_clean_rotation():
         pen_positions.append((x, y))
         timestamps.append(i * 0.033)
 
-    score, is_flicker, verdict = detect_flicker(pen_positions, timestamps, center)
-    assert score >= 95.0
-    assert is_flicker is False
-    assert "EXCELLENT: Stable and covers full rotations." in verdict
+    result = detect_flicker(pen_positions, timestamps, center, average_rpm=120.0)
+    assert result["score"] == 100.0
+    assert result["is_fake_flicker"] is False
+    assert "PERFECT: Flawless 360+ degree rotation" in result["verdict"]
+    assert result["aura_score"] > 0
 
 
 def test_detect_flicker_finger_twitching():
-    """Simulate rapid back-and-forth oscillation (twitching) around an axis -> Should trigger POOR wobble penalty."""
+    """Simulate rapid back-and-forth oscillation (twitching) -> Net rotation is minimal, triggering FAIL condition."""
     center = (100.0, 100.0)
     radius = 50.0
     num_cycles = 10
@@ -57,14 +60,14 @@ def test_detect_flicker_finger_twitching():
             timestamps.append(idx * 0.033)
             idx += 1
 
-    score, is_flicker, verdict = detect_flicker(pen_positions, timestamps, center)
-    assert score == 15.0
-    assert is_flicker is True
-    assert "POOR: Pen is moving back and forth without progressing." in verdict
+    result = detect_flicker(pen_positions, timestamps, center, average_rpm=60.0)
+    assert result["score"] <= 15.0
+    assert result["is_fake_flicker"] is True
+    assert "FAIL: Insufficient net rotation" in result["verdict"]
 
 
 def test_score_capping_on_fake_flicker():
-    """Verify aggregate_results accepts override_score."""
+    """Verify aggregate_results accepts override_score and aura_score."""
     aggregated = aggregate_results(
         rpm=800.0,
         rotations=0,
@@ -76,17 +79,19 @@ def test_score_capping_on_fake_flicker():
         peak_acceleration=300.0,
         tracking_confidence=98.0,
         is_fake_flicker=True,
-        verdict="POOR: Pen is moving back and forth without progressing.",
+        verdict="FAIL: Insufficient net rotation to qualify as a pen flip.",
         override_score=15.0,
+        aura_score=42,
     )
 
     assert aggregated.is_fake_flicker is True
     assert aggregated.overall_score == 15.0
-    assert aggregated.verdict == "POOR: Pen is moving back and forth without progressing."
+    assert aggregated.verdict == "FAIL: Insufficient net rotation to qualify as a pen flip."
+    assert aggregated.aura_score == 42
 
 
 def test_detect_flicker_half_rotation():
-    """Simulate a half rotation (~200 degrees) -> Should trigger INCOMPLETE half rotation condition."""
+    """Simulate a half rotation (~200 degrees) -> Should trigger INCOMPLETE condition."""
     center = (100.0, 100.0)
     radius = 50.0
     num_frames = 20
@@ -101,14 +106,14 @@ def test_detect_flicker_half_rotation():
         pen_positions.append((x, y))
         timestamps.append(i * 0.033)
 
-    score, is_flicker, verdict = detect_flicker(pen_positions, timestamps, center)
-    assert 50.0 <= score < 100.0
-    assert is_flicker is False
-    assert "INCOMPLETE: Stable but only half rotations." in verdict
+    result = detect_flicker(pen_positions, timestamps, center, average_rpm=100.0)
+    assert 50.0 <= result["score"] < 100.0
+    assert result["is_fake_flicker"] is False
+    assert "INCOMPLETE: Solid momentum" in result["verdict"]
 
 
 def test_detect_flicker_human_rotation_with_tremor():
-    """Simulate smooth rotation -> Should trigger EXCELLENT."""
+    """Simulate smooth rotation with noise -> Should trigger PERFECT."""
     import random
     random.seed(42)
 
@@ -129,10 +134,33 @@ def test_detect_flicker_human_rotation_with_tremor():
         pen_positions.append((x, y))
         timestamps.append(i * 0.033)
 
-    score, is_flicker, verdict = detect_flicker(pen_positions, timestamps, center)
-    assert score >= 95.0
-    assert is_flicker is False
-    assert "EXCELLENT: Stable and covers full rotations." in verdict
+def test_aura_levels():
+    """Verify aura_level mapping thresholds."""
+    center = (100.0, 100.0)
+    radius = 50.0
+    num_frames = 35
+    pen_positions = []
+    timestamps = []
+    for i in range(num_frames):
+        angle = (2 * math.pi * i) / (num_frames - 1)
+        pen_positions.append((center[0] + radius * math.cos(angle), center[1] + radius * math.sin(angle)))
+        timestamps.append(i * 0.033)
+
+    # aura_score = int(1.0 * average_rpm * 10) = 10 * average_rpm
+    res1 = detect_flicker(pen_positions, timestamps, center, average_rpm=10.0)  # score=100 -> Negative Aura
+    assert res1["aura_level"] == "Negative Aura (-1000)"
+
+    res2 = detect_flicker(pen_positions, timestamps, center, average_rpm=30.0)  # score=300 -> NPC Aura
+    assert res2["aura_level"] == "NPC Aura"
+
+    res3 = detect_flicker(pen_positions, timestamps, center, average_rpm=70.0)  # score=700 -> Main Character Aura
+    assert res3["aura_level"] == "Main Character Aura"
+
+    res4 = detect_flicker(pen_positions, timestamps, center, average_rpm=150.0) # score=1500 -> Demon Aura
+    assert res4["aura_level"] == "Demon Aura"
+
+    res5 = detect_flicker(pen_positions, timestamps, center, average_rpm=250.0) # score=2500 -> Infinite Aura ♾️
+    assert res5["aura_level"] == "Infinite Aura ♾️"
 
 
 

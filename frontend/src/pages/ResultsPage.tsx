@@ -5,7 +5,7 @@ import { OverallScoreRing } from '../components/OverallScoreRing';
 import { MetricCards } from '../components/MetricCards';
 import { TrajectoryCanvas } from '../components/TrajectoryCanvas';
 import { MetricTimelines } from '../components/MetricTimelines';
-import { Download, RotateCcw, CheckCircle } from 'lucide-react';
+import { Download, RotateCcw, CheckCircle, Sparkles } from 'lucide-react';
 
 interface ResultsPageProps {
   analysis: AnalysisResponse;
@@ -72,10 +72,10 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({
             letterSpacing: '0.06em',
           }}>
             <CheckCircle size={14} color="var(--status-success)" />
-            ANALYSIS COMPLETE · ID #{analysis.analysis_id}
+            POP QUIZ GRADED · TEST ID #{analysis.analysis_id}
           </div>
           <h2 style={{ fontSize: '28px', fontWeight: 800, color: 'var(--text-primary)', marginTop: '4px' }}>
-            Technique & Performance Results
+            Teacher's Kinematic Evaluation & Technique Report
           </h2>
         </div>
 
@@ -86,7 +86,7 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({
             style={{ padding: '10px 16px', fontSize: '13px' }}
           >
             <Download size={15} />
-            <span>Export JSON Telemetry</span>
+            <span>Export Desk Telemetry</span>
           </button>
 
           <button
@@ -95,7 +95,7 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({
             style={{ padding: '10px 20px', fontSize: '13px' }}
           >
             <RotateCcw size={15} />
-            <span>Analyze New Video</span>
+            <span>Spin Again (New Video)</span>
           </button>
         </div>
       </div>
@@ -109,8 +109,8 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({
       }}>
         {/* Left: Replay Video with synchronized HUD */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-            ANALYSIS REPLAY & INTERACTIVE HUD
+          <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
+            CHALKBOARD REPLAY & INTERACTIVE DESK HUD
           </div>
           <VideoViewport
             videoSrc={videoSrc}
@@ -125,22 +125,96 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({
 
         {/* Right: Technique Score Ring & Summary Breakdown */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-            OVERALL TECHNIQUE EVALUATION
+          <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
+            CLASSROOM TECHNIQUE EVALUATION
           </div>
           <OverallScoreRing
             score={overallScore}
-            title="OVERALL TECHNIQUE SCORE"
-            subtitle="Calculated from angular velocity, center accuracy & orbital stability."
+            title="ASSIGNMENT SCORE"
+            subtitle="Calculated from angular momentum, knuckle axis & orbit stability."
           />
+
+          {/* Aura Banner Card */}
+          {(results.aura_level || results.aura_score !== undefined) && (
+            <div className="telemetry-card" style={{
+              padding: '18px 22px',
+              borderRadius: '12px',
+              background: 'linear-gradient(135deg, rgba(0, 255, 136, 0.12) 0%, rgba(0, 240, 255, 0.08) 50%, rgba(192, 132, 252, 0.1) 100%)',
+              border: '1px solid rgba(0, 255, 136, 0.4)',
+              boxShadow: '0 8px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 255, 136, 0.15)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <div style={{
+                  padding: '12px',
+                  borderRadius: '10px',
+                  background: 'rgba(0, 255, 136, 0.18)',
+                  color: '#00FF88',
+                  border: '1px solid rgba(0, 255, 136, 0.4)',
+                  boxShadow: '0 0 14px rgba(0, 255, 136, 0.3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                  <Sparkles size={24} />
+                </div>
+                <div>
+                  <div style={{
+                    fontSize: '11px',
+                    fontFamily: 'var(--font-mono)',
+                    fontWeight: 700,
+                    color: '#00FF88',
+                    letterSpacing: '0.08em',
+                  }}>
+                    CLASSROOM AURA RANK
+                  </div>
+                  <div style={{
+                    fontSize: '20px',
+                    fontWeight: 800,
+                    color: '#F0FDF4',
+                    marginTop: '2px',
+                    textShadow: '0 0 14px rgba(0, 255, 136, 0.4)',
+                  }}>
+                    {results.aura_level || 'Calculating...'}
+                  </div>
+                </div>
+              </div>
+
+              {results.aura_score !== undefined && (
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{
+                    fontSize: '11px',
+                    fontFamily: 'var(--font-mono)',
+                    color: 'var(--text-secondary)',
+                    letterSpacing: '0.05em',
+                  }}>
+                    AURA POINTS
+                  </div>
+                  <div style={{
+                    fontSize: '24px',
+                    fontWeight: 800,
+                    fontFamily: 'var(--font-mono)',
+                    color: '#00F0FF',
+                    textShadow: '0 0 12px rgba(0, 240, 255, 0.5)',
+                    letterSpacing: '-0.02em',
+                  }}>
+                    {results.aura_score.toLocaleString()} <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>PTS</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Verdict Banner */}
           {results.verdict && (
             <div className="telemetry-card" style={{
               padding: '16px 20px',
-              borderRadius: '12px',
-              background: results.is_fake_flicker ? 'rgba(239, 68, 68, 0.08)' : 'rgba(16, 185, 129, 0.08)',
-              border: results.is_fake_flicker ? '1px solid rgba(239, 68, 68, 0.3)' : '1px solid rgba(16, 185, 129, 0.3)',
+              borderRadius: '10px',
+              background: results.is_fake_flicker ? 'rgba(255, 71, 87, 0.08)' : 'rgba(90, 228, 168, 0.08)',
+              border: results.is_fake_flicker ? '1px solid rgba(255, 71, 87, 0.35)' : '1px solid rgba(90, 228, 168, 0.35)',
               display: 'flex',
               flexDirection: 'column',
               gap: '6px',
@@ -149,15 +223,15 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({
                 fontSize: '11px',
                 fontFamily: 'var(--font-mono)',
                 fontWeight: 700,
-                color: results.is_fake_flicker ? '#EF4444' : '#10B981',
+                color: results.is_fake_flicker ? 'var(--teacher-red)' : 'var(--status-success)',
                 letterSpacing: '0.05em',
               }}>
-                {results.is_fake_flicker ? '⚠️ VERDICT · FAKE FLICKER DETECTED' : '✨ VERDICT · EVALUATION'}
+                {results.is_fake_flicker ? '🚨 DETENTION SLIP · FAKE FLICKER' : '🍎 TEACHER REMARK · FLIP EVALUATION'}
               </div>
               <div style={{
                 fontSize: '14px',
                 fontWeight: 600,
-                color: results.is_fake_flicker ? '#FCA5A5' : 'var(--text-primary)',
+                color: results.is_fake_flicker ? '#FFA4A9' : 'var(--text-primary)',
                 lineHeight: 1.4,
               }}>
                 "{results.verdict}"
@@ -167,30 +241,31 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({
 
           {/* Quick breakdown panel */}
           <div className="telemetry-card" style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>
-              CORE TELEMETRY SUMMARY
+            <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0.04em' }}>
+              DESK LAB TELEMETRY SUMMARY
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
-              <span style={{ color: 'var(--text-muted)' }}>Frame Rate</span>
-              <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent-blue)' }}>
+              <span style={{ color: 'var(--text-muted)' }}>Camera Frame Rate</span>
+              <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent-blue)', fontWeight: 600 }}>
                 {analysis.video?.fps || 240} FPS
               </span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
-              <span style={{ color: 'var(--text-muted)' }}>Duration / Frames</span>
+              <span style={{ color: 'var(--text-muted)' }}>Duration / Exam Frames</span>
               <span style={{ fontFamily: 'var(--font-mono)' }}>
                 {analysis.video?.duration || 2.4}s ({analysis.video?.total_frames || 576} frames)
               </span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
               <span style={{ color: 'var(--text-muted)' }}>Confidence Metric</span>
-              <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--status-success)' }}>
-                {results.tracking_confidence.toFixed(1)}% High
+              <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--status-success)', fontWeight: 600 }}>
+                {results.tracking_confidence.toFixed(1)}% High Accuracy
               </span>
             </div>
           </div>
         </div>
       </div>
+
 
       {/* MIDDLE ZONE: Metric Cards (RPM, Center, Wobble + Kinetics) */}
       <div>

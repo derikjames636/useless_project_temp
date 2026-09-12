@@ -68,8 +68,9 @@ export const OverallScoreRing: React.FC<OverallScoreRingProps> = ({
           {/* Progress bar gradient */}
           <defs>
             <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="var(--accent-blue)" />
-              <stop offset="100%" stopColor="var(--accent-purple)" />
+              <stop offset="0%" stopColor="#00FF88" />
+              <stop offset="50%" stopColor="#00F0FF" />
+              <stop offset="100%" stopColor="#C084FC" />
             </linearGradient>
           </defs>
           <circle
@@ -106,7 +107,7 @@ export const OverallScoreRing: React.FC<OverallScoreRingProps> = ({
           </div>
           <div style={{
             fontSize: '12px',
-            color: 'var(--text-muted)',
+            color: 'var(--text-secondary)',
             marginTop: '2px',
             fontFamily: 'var(--font-mono)',
           }}>
@@ -119,10 +120,11 @@ export const OverallScoreRing: React.FC<OverallScoreRingProps> = ({
       <div style={{
         marginTop: '16px',
         fontSize: '13px',
-        fontWeight: 600,
-        color: score >= 80 ? 'var(--status-success)' : score >= 60 ? 'var(--status-warning)' : 'var(--status-danger)',
+        fontWeight: 700,
+        fontFamily: 'var(--font-mono)',
+        color: score >= 80 ? 'var(--status-success)' : score >= 60 ? '#FEF08A' : 'var(--teacher-red)',
       }}>
-        {score >= 85 ? 'EXCELLENT TECHNIQUE' : score >= 70 ? 'STABLE SPIN' : 'UNSTABLE ROTATION'}
+        {score >= 85 ? 'GRADE: A+ (CHALKBOARD MASTER 🍎)' : score >= 70 ? 'GRADE: B (SOLID KNUCKLE ORBIT 👍)' : score >= 50 ? 'GRADE: C (DESK WOBBLE DETECTED 😐)' : 'GRADE: F (CLATTERED ON FLOOR 🚨)'}
       </div>
 
       <div style={{

@@ -11,6 +11,20 @@ from app.database.database import Base, engine
 # Create all tables on startup (safe no-op if they already exist)
 Base.metadata.create_all(bind=engine)
 
+# Migration helper for existing SQLite databases
+with engine.connect() as conn:
+    from sqlalchemy import text
+    try:
+        conn.execute(text("ALTER TABLE analyses ADD COLUMN aura_score INTEGER"))
+        conn.commit()
+    except Exception:
+        pass
+    try:
+        conn.execute(text("ALTER TABLE analyses ADD COLUMN aura_level VARCHAR"))
+        conn.commit()
+    except Exception:
+        pass
+
 
 @asynccontextmanager
 async def lifespan(application: FastAPI):

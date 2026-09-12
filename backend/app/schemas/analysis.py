@@ -41,6 +41,8 @@ class ResultsSchema(BaseModel):
     overall_score: Optional[float] = None
     is_fake_flicker: Optional[bool] = None
     verdict: Optional[str] = None
+    aura_score: Optional[int] = None
+    aura_level: Optional[str] = None
 
 
 class FilesSchema(BaseModel):

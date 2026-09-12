@@ -1,5 +1,5 @@
 import React from 'react';
-import { Activity, Radio, Cpu, RefreshCw } from 'lucide-react';
+import { Radio, Cpu, RefreshCw } from 'lucide-react';
 
 interface HeaderProps {
   currentTab: 'home' | 'upload' | 'analysis' | 'results' | 'replay';
@@ -40,47 +40,52 @@ export const Header: React.FC<HeaderProps> = ({
         }}
       >
         <div style={{
-          width: '34px',
-          height: '34px',
-          borderRadius: '8px',
-          backgroundColor: 'var(--accent-blue-dim)',
-          border: '1px solid var(--accent-blue)',
+          width: '38px',
+          height: '38px',
+          borderRadius: '10px',
+          backgroundColor: 'rgba(0, 255, 136, 0.12)',
+          border: '1px solid rgba(0, 255, 136, 0.4)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: 'var(--accent-blue)',
+          color: '#00FF88',
+          boxShadow: '0 0 16px rgba(0, 255, 136, 0.25)',
         }}>
-          <Activity size={20} />
+          <span style={{ fontSize: '18px' }}>✏️</span>
         </div>
         <div>
           <div style={{
             fontSize: '15px',
-            fontWeight: '700',
+            fontWeight: '800',
             letterSpacing: '-0.02em',
             color: 'var(--text-primary)',
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
           }}>
-            Quantum Pen Flip Predictor
+            Pen Flip Aura Calculator
             <span style={{
               fontSize: '10px',
               fontFamily: 'var(--font-mono)',
-              padding: '2px 6px',
-              borderRadius: '4px',
-              backgroundColor: 'rgba(36, 136, 255, 0.1)',
-              color: 'var(--accent-blue)',
-              border: '1px solid rgba(36, 136, 255, 0.2)',
+              padding: '2px 8px',
+              borderRadius: '6px',
+              backgroundColor: 'rgba(0, 240, 255, 0.12)',
+              color: '#00F0FF',
+              border: '1px solid rgba(0, 240, 255, 0.35)',
+              boxShadow: '0 0 8px rgba(0, 240, 255, 0.2)',
+              fontWeight: 800,
+              letterSpacing: '0.05em',
             }}>
-              v1.0-CV
+              PERIOD 3 · PHYSICS HUD
             </span>
           </div>
           <div style={{
             fontSize: '11px',
-            color: 'var(--text-muted)',
+            fontFamily: 'var(--font-mono)',
+            color: 'var(--text-secondary)',
             marginTop: '-2px',
           }}>
-            Kinetic Spin Telemetry & Computer Vision Analysis
+            Back-Row Desk Telemetry & Angular Momentum Engine
           </div>
         </div>
       </div>
@@ -92,7 +97,7 @@ export const Header: React.FC<HeaderProps> = ({
         gap: '6px',
         backgroundColor: 'var(--bg-secondary)',
         padding: '4px',
-        borderRadius: '10px',
+        borderRadius: '8px',
         border: '1px solid var(--border-subtle)',
       }}>
         <button
@@ -100,7 +105,7 @@ export const Header: React.FC<HeaderProps> = ({
           style={{
             background: currentTab === 'home' || currentTab === 'upload' ? 'var(--bg-card)' : 'transparent',
             color: currentTab === 'home' || currentTab === 'upload' ? 'var(--text-primary)' : 'var(--text-secondary)',
-            border: 'none',
+            border: currentTab === 'home' || currentTab === 'upload' ? '1px solid var(--border-subtle)' : '1px solid transparent',
             borderRadius: '6px',
             padding: '6px 14px',
             fontSize: '13px',
@@ -109,7 +114,7 @@ export const Header: React.FC<HeaderProps> = ({
             transition: 'all 0.15s ease',
           }}
         >
-          Upload / Ingest
+          Desk Upload 🪑
         </button>
 
         <button
@@ -118,7 +123,7 @@ export const Header: React.FC<HeaderProps> = ({
           style={{
             background: currentTab === 'analysis' ? 'var(--bg-card)' : 'transparent',
             color: currentTab === 'analysis' ? 'var(--accent-blue)' : (hasAnalysis ? 'var(--text-secondary)' : 'var(--text-muted)'),
-            border: 'none',
+            border: currentTab === 'analysis' ? '1px solid var(--border-subtle)' : '1px solid transparent',
             borderRadius: '6px',
             padding: '6px 14px',
             fontSize: '13px',
@@ -128,7 +133,7 @@ export const Header: React.FC<HeaderProps> = ({
             transition: 'all 0.15s ease',
           }}
         >
-          Analysis HUD
+          Teacher Turnaround 👨‍🏫
         </button>
 
         <button
@@ -137,7 +142,7 @@ export const Header: React.FC<HeaderProps> = ({
           style={{
             background: currentTab === 'results' || currentTab === 'replay' ? 'var(--bg-card)' : 'transparent',
             color: currentTab === 'results' || currentTab === 'replay' ? 'var(--accent-purple)' : (hasAnalysis ? 'var(--text-secondary)' : 'var(--text-muted)'),
-            border: 'none',
+            border: currentTab === 'results' || currentTab === 'replay' ? '1px solid var(--border-subtle)' : '1px solid transparent',
             borderRadius: '6px',
             padding: '6px 14px',
             fontSize: '13px',
@@ -147,7 +152,7 @@ export const Header: React.FC<HeaderProps> = ({
             transition: 'all 0.15s ease',
           }}
         >
-          Results & Replay
+          Pop Quiz Report Card 📝
         </button>
       </nav>
 
@@ -162,16 +167,17 @@ export const Header: React.FC<HeaderProps> = ({
             gap: '6px',
             padding: '6px 12px',
             borderRadius: '8px',
-            background: isMockMode ? 'rgba(192, 38, 255, 0.1)' : 'rgba(54, 226, 160, 0.1)',
-            border: `1px solid ${isMockMode ? 'rgba(192, 38, 255, 0.3)' : 'rgba(54, 226, 160, 0.3)'}`,
-            color: isMockMode ? 'var(--accent-purple)' : 'var(--status-success)',
+            background: isMockMode ? 'rgba(254, 240, 138, 0.1)' : 'rgba(90, 228, 168, 0.1)',
+            border: `1px solid ${isMockMode ? 'rgba(254, 240, 138, 0.3)' : 'rgba(90, 228, 168, 0.3)'}`,
+            color: isMockMode ? '#FEF08A' : 'var(--status-success)',
             fontSize: '12px',
             fontFamily: 'var(--font-mono)',
+            fontWeight: 700,
             cursor: 'pointer',
           }}
         >
           {isMockMode ? <Cpu size={14} /> : <Radio size={14} />}
-          <span>{isMockMode ? 'MOCK ENGINE' : 'LIVE API'}</span>
+          <span>{isMockMode ? 'PENCIL BOX SIM' : 'LIVE CHALKBOARD'}</span>
           <RefreshCw size={12} style={{ marginLeft: '4px', opacity: 0.7 }} />
         </button>
       </div>

@@ -40,6 +40,8 @@ class AggregatedResult:
     overall_score: float
     is_fake_flicker: bool = False
     verdict: str = ""
+    aura_score: int = 0
+    aura_level: str = ""
 
 
 def aggregate_results(
@@ -55,6 +57,8 @@ def aggregate_results(
     is_fake_flicker: bool = False,
     verdict: str = "",
     override_score: Optional[float] = None,
+    aura_score: int = 0,
+    aura_level: str = "",
 ) -> AggregatedResult:
     """
     Combine individual metric values into an AggregatedResult.
@@ -94,4 +98,6 @@ def aggregate_results(
         overall_score=round(overall, 1),
         is_fake_flicker=is_fake_flicker,
         verdict=verdict,
+        aura_score=aura_score,
+        aura_level=aura_level,
     )

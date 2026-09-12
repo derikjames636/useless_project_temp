@@ -88,6 +88,8 @@ def _db_to_response(record: AnalysisModel, analysis_id: str) -> AnalysisResponse
             overall_score=record.overall_score,
             is_fake_flicker=bool(record.is_fake_flicker) if record.is_fake_flicker is not None else False,
             verdict=record.verdict,
+            aura_score=record.aura_score,
+            aura_level=record.aura_level,
         )
 
     files = None

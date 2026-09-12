@@ -91,8 +91,10 @@ export const UploadZone: React.FC<UploadZoneProps> = ({
           onDrop={handleDrop}
           onClick={() => fileInputRef.current?.click()}
           style={{
-            border: `2px dashed ${isDragOver ? 'var(--accent-blue)' : 'var(--border-subtle)'}`,
-            backgroundColor: isDragOver ? 'var(--accent-blue-dim)' : 'var(--bg-card)',
+            border: `2px dashed ${isDragOver ? '#00FF88' : 'rgba(0, 255, 136, 0.25)'}`,
+            backgroundColor: isDragOver ? 'rgba(0, 255, 136, 0.08)' : 'var(--bg-card)',
+            boxShadow: isDragOver ? '0 0 30px rgba(0, 255, 136, 0.2)' : '0 8px 32px rgba(0, 0, 0, 0.4)',
+            backdropFilter: 'blur(12px)',
             borderRadius: '16px',
             padding: '60px 32px',
             textAlign: 'center',
@@ -119,37 +121,38 @@ export const UploadZone: React.FC<UploadZoneProps> = ({
           <div style={{
             width: '64px',
             height: '64px',
-            borderRadius: '50%',
-            backgroundColor: 'var(--bg-secondary)',
-            border: '1px solid var(--border-subtle)',
+            borderRadius: '14px',
+            backgroundColor: 'rgba(0, 255, 136, 0.1)',
+            border: '1px solid rgba(0, 255, 136, 0.3)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: 'var(--accent-blue)',
+            color: '#00FF88',
+            boxShadow: '0 0 16px rgba(0, 255, 136, 0.15)',
           }}>
             <Upload size={28} />
           </div>
 
           <div>
-            <h3 style={{ fontSize: '18px', fontWeight: 600, color: 'var(--text-primary)' }}>
-              DROP VIDEO HERE
+            <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+              SLIDE PEN FLIP FOOTAGE ACROSS DESK 🪑
             </h3>
             <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-              or click to browse from device
+              or click to pick video from device (MP4, MOV, WebM)
             </p>
           </div>
 
           <div style={{
             fontSize: '12px',
             fontFamily: 'var(--font-mono)',
-            color: 'var(--text-muted)',
+            color: '#FEF08A',
             letterSpacing: '0.05em',
             padding: '6px 14px',
             borderRadius: '6px',
-            backgroundColor: 'var(--bg-primary)',
-            border: '1px solid var(--border-subtle)',
+            backgroundColor: 'rgba(254, 240, 138, 0.08)',
+            border: '1px dashed rgba(254, 240, 138, 0.3)',
           }}>
-            MP4 · MOV · AVI · WEBM (120 FPS / 240 FPS RECOMMENDED)
+            DESK TELEMETRY LAB · MP4 / MOV / WEBM (120 FPS / 240 FPS RECOMMENDED)
           </div>
 
           {extractingMetadata && (
@@ -281,13 +284,13 @@ export const UploadZone: React.FC<UploadZoneProps> = ({
               className="btn-primary"
               disabled={isUploading}
               onClick={onStartAnalysis}
-              style={{ minWidth: '220px' }}
+              style={{ minWidth: '240px' }}
             >
               {isUploading ? (
-                <span>Ingesting Video...</span>
+                <span>Grading Homework...</span>
               ) : (
                 <>
-                  <span>Analyze Video</span>
+                  <span>Submit For Teacher Grading</span>
                   <ArrowRight size={18} />
                 </>
               )}

@@ -34,23 +34,30 @@ def detect_flicker(
     pen_positions: List[Tuple[float, float]],
     timestamps: List[float],
     rotation_center: Tuple[float, float],
-) -> Tuple[float, bool, str]:
+    average_rpm: float = 0.0,
+) -> dict:
     """
-    Realistic Physics Engine: Evaluate net_rotation vs absolute_rotation.
-    Rewards smooth continuous momentum and penalizes high finger jitter.
+    Evaluate pen flip attempts based purely on rotational completeness and speed.
 
     Parameters
     ----------
     pen_positions  : list of (x, y) coordinates of the pen center per frame.
     timestamps     : list of timestamps in seconds.
     rotation_center: (x_c, y_c) center of rotation (e.g. thumb landmark).
+    average_rpm    : calculated average RPM for aura score calculation.
 
     Returns
     -------
-    (score: float, is_fake_flicker: bool, verdict: str)
+    dict with keys: score, verdict, is_fake_flicker, aura_score
     """
     if len(pen_positions) < 3 or len(timestamps) < 3:
-        return 0.0, False, "INCOMPLETE: Insufficient rotation."
+        return {
+            "score": 0.0,
+            "verdict": "FAIL: Insufficient net rotation to qualify as a pen flip.",
+            "is_fake_flicker": True,
+            "aura_score": 0,
+            "aura_level": "Negative Aura (-1000)",
+        }
 
     smoothed_positions = _smooth_positions(pen_positions, window_size=3)
 
@@ -62,31 +69,44 @@ def detect_flicker(
     ]
 
     net_rotation = 0.0
-    absolute_rotation = 0.0
 
     for i in range(1, len(angles)):
         raw_delta = angles[i] - angles[i - 1]
         delta_angle = (raw_delta + 180) % 360 - 180
         net_rotation += delta_angle
-        absolute_rotation += abs(delta_angle)
 
-    if abs(net_rotation) >= 270:
-        score = min(100.0, (abs(net_rotation) / 360.0) * 100.0)
-        verdict = "EXCELLENT: Stable and covers full rotations."
-        is_fake_flicker = False
-    elif abs(net_rotation) >= 120 and abs(net_rotation) < 270:
-        score = (abs(net_rotation) / 360.0) * 100.0
-        verdict = "INCOMPLETE: Stable but only half rotations."
-        is_fake_flicker = False
-    elif absolute_rotation > (abs(net_rotation) * 2.5):
-        score = 15.0
-        verdict = "POOR: Pen is moving back and forth without progressing."
-        is_fake_flicker = True
+    aura_score = int((abs(net_rotation) / 360.0) * average_rpm * 10)
+
+    if aura_score < 200:
+        aura_level = "Negative Aura (-1000)"
+    elif aura_score < 500:
+        aura_level = "NPC Aura"
+    elif aura_score < 1000:
+        aura_level = "Main Character Aura"
+    elif aura_score < 2000:
+        aura_level = "Demon Aura"
     else:
-        score = 10.0
-        verdict = "FAIL: Insufficient momentum."
+        aura_level = "Infinite Aura ♾️"
+
+    if abs(net_rotation) >= 360:
+        score = 100.0
+        verdict = "PERFECT: Flawless 360+ degree rotation at high velocity."
+        is_fake_flicker = False
+    elif abs(net_rotation) >= 180:
+        score = (abs(net_rotation) / 360.0) * 100.0
+        verdict = "INCOMPLETE: Solid momentum, but fell short of a full rotation."
+        is_fake_flicker = False
+    else:
+        score = max(5.0, (abs(net_rotation) / 360.0) * 100.0)
+        verdict = "FAIL: Insufficient net rotation to qualify as a pen flip."
         is_fake_flicker = True
 
-    return round(score, 1), is_fake_flicker, verdict
+    return {
+        "score": round(score, 1),
+        "verdict": verdict,
+        "is_fake_flicker": is_fake_flicker,
+        "aura_score": aura_score,
+        "aura_level": aura_level,
+    }
 
 

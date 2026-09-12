@@ -171,7 +171,12 @@ def run_analysis(analysis_id: str, video_path: Path, db_session_factory) -> None
         _, center_accuracy = compute_center_accuracy(pen_positions, rotation_center)
         _, wobble_percent = compute_wobble(pen_positions, rotation_center)
         avg_vel, peak_vel, avg_acc, peak_acc = compute_kinetics(pen_positions, timestamps)
-        anti_score, is_fake_flicker, verdict = detect_flicker(pen_positions, timestamps, rotation_center)
+        flicker_result = detect_flicker(pen_positions, timestamps, rotation_center, average_rpm=rpm)
+        anti_score = flicker_result["score"]
+        is_fake_flicker = flicker_result["is_fake_flicker"]
+        verdict = flicker_result["verdict"]
+        aura_score = flicker_result["aura_score"]
+        aura_level = flicker_result["aura_level"]
 
         # Tracking confidence: mean of detected frame confidences
         confidences = [r.tracking_confidence for r in detected_records if r.tracking_confidence > 0]
@@ -191,6 +196,8 @@ def run_analysis(analysis_id: str, video_path: Path, db_session_factory) -> None
             is_fake_flicker=is_fake_flicker,
             verdict=verdict,
             override_score=anti_score,
+            aura_score=aura_score,
+            aura_level=aura_level,
         )
 
         # ---- Save trajectory ----
@@ -211,6 +218,8 @@ def run_analysis(analysis_id: str, video_path: Path, db_session_factory) -> None
         record.overall_score = aggregated.overall_score
         record.is_fake_flicker = 1 if aggregated.is_fake_flicker else 0
         record.verdict = aggregated.verdict
+        record.aura_score = aggregated.aura_score
+        record.aura_level = aggregated.aura_level
         record.completed_at = datetime.now(timezone.utc)
         _set_status(db, record, "completed", progress=100)
 

@@ -31,6 +31,8 @@ export interface AnalysisResults {
   overall_score?: number; // Optional technique score if returned by backend
   is_fake_flicker?: boolean;
   verdict?: string;
+  aura_score?: number;
+  aura_level?: string;
 }
 
 export interface AnalysisFiles {

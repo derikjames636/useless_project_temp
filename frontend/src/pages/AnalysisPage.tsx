@@ -32,22 +32,22 @@ export const AnalysisPage: React.FC<AnalysisPageProps> = ({
           <div style={{
             fontSize: '12px',
             fontFamily: 'var(--font-mono)',
-            color: 'var(--accent-blue)',
-            fontWeight: 600,
+            color: 'var(--status-success)',
+            fontWeight: 700,
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
           }}>
             <span className="indicator-dot" />
-            COMPUTER VISION INGESTION PIPELINE
+            TEACHER FACING BLACKBOARD · STEALTH HUD 🤫
           </div>
           <h2 style={{ fontSize: '28px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '4px' }}>
-            Tracking & Kinematic Analysis
+            Desk Tracking & Kinematic Analysis
           </h2>
         </div>
 
         <button onClick={onCancel} className="btn-secondary" style={{ padding: '8px 16px', fontSize: '13px' }}>
-          Cancel Analysis
+          Abort & Hide Pen 🙈
         </button>
       </div>
 
