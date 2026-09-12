@@ -3,13 +3,14 @@ import type {
   StatusResponse,
   TrajectoryResponse,
 } from '../types/analysis';
-import { MOCK_ANALYSIS_COMPLETED, MOCK_TRAJECTORY } from './mockData';
+import { MOCK_TRAJECTORY, generateDynamicMockAnalysis } from './mockData';
 
 const API_BASE = '/api';
 
 export class ApiService {
   private useMockFallback: boolean = false;
   private mockJobProgress: Map<string, number> = new Map();
+  private mockResultsCache: Map<string, AnalysisResponse> = new Map();
 
   constructor() {
     // Check if user or environment forced mock mode
@@ -74,6 +75,12 @@ export class ApiService {
     // Mock Simulation Fallback
     const simulatedId = 'sim_' + Math.random().toString(36).substring(2, 9);
     this.mockJobProgress.set(simulatedId, 0);
+    const dynamicResult = generateDynamicMockAnalysis(simulatedId, {
+      name: videoFile.name,
+      size: videoFile.size,
+    });
+    this.mockResultsCache.set(simulatedId, dynamicResult);
+
     return {
       analysis_id: simulatedId,
       status: 'queued',
@@ -130,11 +137,14 @@ export class ApiService {
       }
     }
 
-    // Return realistic mock result
-    return {
-      ...MOCK_ANALYSIS_COMPLETED,
-      analysis_id: analysisId,
-    };
+    // Return unique dynamic result for this upload ID
+    if (this.mockResultsCache.has(analysisId)) {
+      return this.mockResultsCache.get(analysisId)!;
+    }
+
+    const newDynamic = generateDynamicMockAnalysis(analysisId);
+    this.mockResultsCache.set(analysisId, newDynamic);
+    return newDynamic;
   }
 
   /**
