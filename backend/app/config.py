@@ -67,5 +67,5 @@ MAX_EXPECTED_RPM: float = float(os.getenv("MAX_EXPECTED_RPM", "1200.0"))
 # CORS (for local development with the React frontend)
 # ---------------------------------------------------------------------------
 CORS_ORIGINS: list[str] = os.getenv(
-    "CORS_ORIGINS", "http://localhost:3000,http://localhost:5173"
+    "CORS_ORIGINS", "*"
 ).split(",")
