@@ -1,40 +1,74 @@
+<img width="1600" height="745" alt="proj1" src="https://github.com/user-attachments/assets/f3e93a57-f735-4c89-b450-9cc84c96f6c1" />
+<img width="1600" height="745" alt="proj1" src="https://github.com/user-attachments/assets/663767d0-ce3a-4cab-a114-96d154fe054c" />
+<img width="1600" height="745" alt="proj1" src="https://github.com/user-attachments/assets/6f0f9463-a0f0-406e-8cf8-c9537e9d6dcd" />
 <img width="1280" height="640" alt="git (1)" src="https://github.com/user-attachments/assets/8920b256-2ba8-4988-b824-5351134eb4bd" />
 
 
 
-# [Project Name] 🎯
+# [PEN FLIP AURA CALCULATOR] 🎯
 
 
 ## Basic Details
-### Team Name: [Name]
+### Team Name: [FREEMAN]
 
 
 ### Team Members
-- Team Lead: [Name] - [College]
-- Member 2: [Name] - [College]
-- Member 3: [Name] - [College]
+- Member 2: [SIDHARTH.S] - [st joseph's college of engineering and technology palai]
+- Member 3: [DERICK JAMES] - [st joseph's college of engineering and technology palai]
 
 ### Project Description
-[2-3 lines about what your project does]
+[PEN FLIP AURA CALCULATOR is a computer-vision-powered web application designed to track and evaluate pen-spinning technique from uploaded videos.
+
+Using frame-by-frame visual tracking (via OpenCV and MediaPipe), it measures kinetic performance metrics such as spin speed (RPM), center-of-rotation accuracy, and wobble stability.
+
+These insights are presented through an interactive results dashboard featuring visual trajectory overlays and motion replay.]
 
 ### The Problem (that doesn't exist)
-[What ridiculous problem are you solving?]
+[Unregulated pen-spinning creates off-axis gyroscopic wobble, generating subsonic desk micro-vibrations that subconsciously desynchronize neighboring coworkers' cognitive focus.
+
+Furthermore, unmonitored spin speeds exceeding 400 RPM induce centrifugal ink cavitation, triggering sudden, untraceable ballpoint failure during multi-million-dollar contract signings.
+
+Without sub-millimeter computer-vision calibration, office professionals face an untracked epidemic of dropped pens and catastrophic loss of boardroom authority.]
 
 ### The Solution (that nobody asked for)
-[How are you solving it? Keep it fun!]
+[the world’s first mission-critical, military-grade computer vision platform dedicated to eliminating off-axis wobble and bringing sub-millimeter kinetic accountability to office stationery.]
 
 ## Technical Details
 ### Technologies/Components Used
 For Software:
-- [Languages used]
-- [Frameworks used]
-- [Libraries used]
-- [Tools used]
-
-For Hardware:
-- [List main components]
-- [List specifications]
-- [List tools required]
+LANGUAGES
+- [Python ,TypeScript (JavaScript),HTML5,CSS3,SQL (SQLite)]
+FRAMEWORK
+- [frontend,backend,computer vision and math]
+LIBRARIES USED
+- [OpenCV (opencv-python)
+MediaPipe
+NumPy
+FastAPI
+Uvicorn
+SQLAlchemy
+Pydantic
+Lucide React
+React
+React DOM
+python-multipart
+aiofiles
+HTTPX
+Pytest
+pytest-asyncio
+Oxlint]
+TOOLS USED
+- [Vite
+TypeScript Compiler (tsc)
+Oxlint
+SQLite
+Node.js
+npm
+Python venv
+pip
+Pytest
+Git
+FFmpeg]
 
 ### Implementation
 For Software:
@@ -48,50 +82,51 @@ For Software:
 For Software:
 
 # Screenshots (Add at least 3)
-![Screenshot1](Add screenshot 1 here with proper name)
-*Add caption explaining what this shows*
+<img width="1600" height="745" alt="proj1" src="https://github.com/user-attachments/assets/fd81651c-b049-4bfa-9316-d6a635868e8a" />
+pen flip aura calculator home screen
 
-![Screenshot2](Add screenshot 2 here with proper name)
-*Add caption explaining what this shows*
+<img width="1600" height="762" alt="proj2" src="https://github.com/user-attachments/assets/8c04130b-3058-49a9-ab2d-de28596ba6e1" />
+upoading the spinning video
 
-![Screenshot3](Add screenshot 3 here with proper name)
-*Add caption explaining what this shows*
+<img width="1600" height="751" alt="proj3" src="https://github.com/user-attachments/assets/d6d37248-073b-4c78-9a08-66bd5d833bb4" />
+shows the final output as aura level 
 
 # Diagrams
-![Workflow](Add your workflow/architecture diagram here)
-*Add caption explaining your workflow*
+[ USER / FRONTEND ]
+         │
+         │  1. Upload Video (.mp4/.mov)
+         ▼
+[ FASTAPI BACKEND ] ─────────────► [ STORAGE & SQLITE ]
+         │                             (Store raw video & record status: "PENDING")
+         │  2. Trigger Background Task
+         ▼
+[ ANALYSIS ENGINE ]
+   ├── OpenCV       ──► Frame Extraction & Color/Contour Tracking
+   ├── MediaPipe    ──► Hand & Finger Joint Center Detection
+   └── NumPy        ──► Angular Velocity, RPM, Center Accuracy & Wobble
+         │
+         │  3. Save Metrics & Trajectory Data
+         ▼
+[ SQLITE DATABASE ] (Status: "COMPLETED")
+         │
+         │  4. Poll / Fetch Results & Trajectory JSON
+         ▼
+[ RESULTS DASHBOARD ]
+   ├── Overall Technique Score (0–100)
+   ├── Kinetic Cards (RPM, Wobble %, Center Accuracy)
+   └── Interactive Video Replay + Canvas Trajectory Overlay0
 
-For Hardware:
-
-# Schematic & Circuit
-![Circuit](Add your circuit diagram here)
-*Add caption explaining connections*
-
-![Schematic](Add your schematic diagram here)
-*Add caption explaining the schematic*
-
-# Build Photos
-![Components](Add photo of your components here)
-*List out all components shown*
-
-![Build](Add photos of build process here)
-*Explain the build steps*
-
-![Final](Add photo of final product here)
-*Explain the final build*
 
 ### Project Demo
-# Video
-[Add your demo video link here]
-*Explain what the video demonstrates*
 
-# Additional Demos
-[Add any extra demo materials/links]
+https://github.com/user-attachments/assets/0a4c5e66-6b8d-4d43-bcb8-8233debc16cb
+complete working of the pen flip aura calculator
+
+
 
 ## Team Contributions
-- [Name 1]: [Specific contributions]
-- [Name 2]: [Specific contributions]
-- [Name 3]: [Specific contributions]
+- [Sidharth.S]: [Frontend]
+- [Derick james]: [Backend]
 
 ---
 Made with ❤️ at TinkerHub Useless Projects 
