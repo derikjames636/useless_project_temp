@@ -1,16 +1,20 @@
 import React from 'react';
-import { Radio } from 'lucide-react';
+import { Radio, Cpu, RefreshCw } from 'lucide-react';
 
 interface HeaderProps {
   currentTab: 'home' | 'upload' | 'analysis' | 'results' | 'replay';
   onSelectTab: (tab: 'home' | 'upload' | 'analysis' | 'results' | 'replay') => void;
   hasAnalysis: boolean;
+  isMockMode: boolean;
+  onToggleMock: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   currentTab,
   onSelectTab,
   hasAnalysis,
+  isMockMode,
+  onToggleMock,
 }) => {
   return (
     <header style={{
@@ -160,28 +164,31 @@ export const Header: React.FC<HeaderProps> = ({
         </button>
       </nav>
 
-      {/* Right: Environment Indicator */}
+      {/* Right: API Mode / Environment Toggle */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <div
-          title="Connected to Live Server"
+        <button
+          onClick={onToggleMock}
+          title="Toggle between Live Server and Offline Pencil Box Sim"
           style={{
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
             padding: '6px 14px',
             borderRadius: '6px',
-            background: 'rgba(74, 222, 128, 0.15)',
-            border: '1px solid rgba(74, 222, 128, 0.4)',
-            color: '#86EFAC',
+            background: isMockMode ? '#3A2616' : 'rgba(74, 222, 128, 0.15)',
+            border: `1px solid ${isMockMode ? '#704727' : 'rgba(74, 222, 128, 0.4)'}`,
+            color: isMockMode ? '#FEF08A' : '#86EFAC',
             fontSize: '12px',
             fontFamily: 'var(--font-typewriter)',
             fontWeight: 700,
+            cursor: 'pointer',
             boxShadow: '0 2px 4px rgba(0,0,0,0.3)',
           }}
         >
-          <Radio size={14} />
-          <span>Live Chalkboard</span>
-        </div>
+          {isMockMode ? <Cpu size={14} /> : <Radio size={14} />}
+          <span>{isMockMode ? 'PENCIL BOX SIM' : 'LIVE CHALKBOARD'}</span>
+          <RefreshCw size={12} style={{ marginLeft: '4px', opacity: 0.7 }} />
+        </button>
       </div>
     </header>
   );
