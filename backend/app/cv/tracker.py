@@ -22,7 +22,7 @@ import cv2
 import numpy as np
 
 from app.config import MAX_OCCLUDED_FRAMES
-from app.cv.hand_detector import detect_finger_roi, detect_hand_bbox, detect_rotation_center
+from app.cv.hand_detector import detect_hand_features
 from app.cv.pen_detector import bounding_box_center, detect_motion_pen, detect_pen
 
 
@@ -149,8 +149,9 @@ def track_video(
         upper_color = np.array([140, 255, 255], dtype=np.uint8)
         hsv_bounds = (lower_color, upper_color)
 
-    # Reset position pointer back to frame 0
-    cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+    # Reset VideoCapture cleanly back to frame 0
+    cap.release()
+    cap = cv2.VideoCapture(str(video_path))
 
     frame_idx = 0
     estimated_gap_start_idx: Optional[int] = None
@@ -163,16 +164,11 @@ def track_video(
 
         timestamp = frame_idx / fps
 
-        # Dynamic ROI around Palm Base (LM0), Thumb Tip (LM4), Index Tip (LM8) with 30px padding
-        finger_roi = detect_finger_roi(frame, padding=30)
-        hand_bbox = detect_hand_bbox(frame, padding=100)
-
-        # Try to establish/update rotation centre (only when hand is visible)
-        if not rotation_center_found or frame_idx % 30 == 0:
-            rc = detect_rotation_center(frame)
-            if rc is not None:
-                rotation_center = rc
-                rotation_center_found = True
+        # Single-pass MediaPipe hand detection for rotation center, hand bbox, and finger ROI
+        rc, hand_bbox, finger_roi = detect_hand_features(frame, padding_finger=30, padding_hand=100)
+        if rc is not None and (not rotation_center_found or frame_idx % 30 == 0):
+            rotation_center = rc
+            rotation_center_found = True
 
         # Frame-difference motion masking (cv2.absdiff + finger ROI mask + cv2.moments)
         m_bbox, m_conf, m_center, prev_gray_blur = detect_motion_pen(

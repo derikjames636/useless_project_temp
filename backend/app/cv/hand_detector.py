@@ -56,115 +56,83 @@ def _get_detector() -> Optional[Any]:
     return _hands_detector
 
 
-def detect_rotation_center(frame: np.ndarray) -> Optional[Tuple[float, float]]:
+def detect_hand_features(
+    frame: np.ndarray, padding_finger: int = 30, padding_hand: int = 100
+) -> Tuple[
+    Optional[Tuple[float, float]],
+    Optional[Tuple[int, int, int, int]],
+    Optional[Tuple[int, int, int, int]],
+]:
     """
-    Detect the rotation centre from the hand in the frame.
-
-    Returns
-    -------
-    (x_c, y_c) in pixel coordinates, or None if no hand is visible
-    or mediapipe is unavailable.
+    Run MediaPipe detector ONCE per frame and return:
+    (rotation_center, hand_bbox, finger_roi)
     """
     detector = _get_detector()
     if detector is None:
-        return None
+        return None, None, None
 
     h, w = frame.shape[:2]
     rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     results = detector.process(rgb)
 
     if not results.multi_hand_landmarks:
-        return None
+        return None, None, None
 
     landmarks = results.multi_hand_landmarks[0].landmark
 
-    # Primary: use the configured landmark index
+    # 1. Rotation center
+    rotation_center = None
     if ROTATION_CENTER_LANDMARK < len(landmarks):
         lm = landmarks[ROTATION_CENTER_LANDMARK]
-        return lm.x * w, lm.y * h
+        rotation_center = (lm.x * w, lm.y * h)
+    else:
+        palm_indices = [0, 5, 9, 13, 17]
+        xs = [landmarks[i].x * w for i in palm_indices if i < len(landmarks)]
+        ys = [landmarks[i].y * h for i in palm_indices if i < len(landmarks)]
+        if xs:
+            rotation_center = (float(np.mean(xs)), float(np.mean(ys)))
 
-    # Fallback: palm centroid
-    palm_indices = [0, 5, 9, 13, 17]
-    xs = [landmarks[i].x * w for i in palm_indices if i < len(landmarks)]
-    ys = [landmarks[i].y * h for i in palm_indices if i < len(landmarks)]
-    if xs:
-        return float(np.mean(xs)), float(np.mean(ys))
+    # 2. Hand BBox
+    xs_all = [lm.x * w for lm in landmarks]
+    ys_all = [lm.y * h for lm in landmarks]
+    x_min_h = max(0, int(min(xs_all) - padding_hand))
+    y_min_h = max(0, int(min(ys_all) - padding_hand))
+    x_max_h = min(w, int(max(xs_all) + padding_hand))
+    y_max_h = min(h, int(max(ys_all) + padding_hand))
+    hand_bbox = (x_min_h, y_min_h, max(1, x_max_h - x_min_h), max(1, y_max_h - y_min_h))
 
-    return None
+    # 3. Finger ROI (LM 0, 4, 8)
+    target_indices = [0, 4, 8]
+    xs_f = [landmarks[i].x * w for i in target_indices if i < len(landmarks)]
+    ys_f = [landmarks[i].y * h for i in target_indices if i < len(landmarks)]
+    finger_roi = None
+    if xs_f:
+        x_min_f = max(0, int(min(xs_f) - padding_finger))
+        y_min_f = max(0, int(min(ys_f) - padding_finger))
+        x_max_f = min(w, int(max(xs_f) + padding_finger))
+        y_max_f = min(h, int(max(ys_f) + padding_finger))
+        finger_roi = (x_min_f, y_min_f, max(1, x_max_f - x_min_f), max(1, y_max_f - y_min_f))
+
+    return rotation_center, hand_bbox, finger_roi
+
+
+def detect_rotation_center(frame: np.ndarray) -> Optional[Tuple[float, float]]:
+    rc, _, _ = detect_hand_features(frame)
+    return rc
 
 
 def detect_hand_bbox(
     frame: np.ndarray, padding: int = 100
 ) -> Optional[Tuple[int, int, int, int]]:
-    """
-    Detect hand bounding box padded by specified pixels for spatial ROI masking.
-
-    Returns
-    -------
-    (x, y, w, h) in pixel coordinates, or None if no hand is visible
-    or mediapipe is unavailable.
-    """
-    detector = _get_detector()
-    if detector is None:
-        return None
-
-    h, w = frame.shape[:2]
-    rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    results = detector.process(rgb)
-
-    if not results.multi_hand_landmarks:
-        return None
-
-    landmarks = results.multi_hand_landmarks[0].landmark
-    xs = [lm.x * w for lm in landmarks]
-    ys = [lm.y * h for lm in landmarks]
-
-    x_min = max(0, int(min(xs) - padding))
-    y_min = max(0, int(min(ys) - padding))
-    x_max = min(w, int(max(xs) + padding))
-    y_max = min(h, int(max(ys) + padding))
-
-    bw = max(1, x_max - x_min)
-    bh = max(1, y_max - y_min)
-
-    return x_min, y_min, bw, bh
+    _, hb, _ = detect_hand_features(frame, padding_hand=padding)
+    return hb
 
 
 def detect_finger_roi(
     frame: np.ndarray, padding: int = 30
 ) -> Optional[Tuple[int, int, int, int]]:
-    """
-    Extract a dynamic bounding box (ROI) around Palm Base (LM 0),
-    Thumb Tip (LM 4), and Index Fingertip (LM 8) with specified padding.
-    """
-    detector = _get_detector()
-    if detector is None:
-        return None
-
-    h, w = frame.shape[:2]
-    rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    results = detector.process(rgb)
-
-    if not results.multi_hand_landmarks:
-        return None
-
-    landmarks = results.multi_hand_landmarks[0].landmark
-    target_indices = [0, 4, 8]
-    xs = [landmarks[i].x * w for i in target_indices if i < len(landmarks)]
-    ys = [landmarks[i].y * h for i in target_indices if i < len(landmarks)]
-
-    if not xs:
-        return None
-
-    x_min = max(0, int(min(xs) - padding))
-    y_min = max(0, int(min(ys) - padding))
-    x_max = min(w, int(max(xs) + padding))
-    y_max = min(h, int(max(ys) + padding))
-
-    bw = max(1, x_max - x_min)
-    bh = max(1, y_max - y_min)
-
-    return x_min, y_min, bw, bh
+    _, _, fr = detect_hand_features(frame, padding_finger=padding)
+    return fr
 
 
 
