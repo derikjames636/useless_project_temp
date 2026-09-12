@@ -16,7 +16,6 @@ import type {
 
 export function App() {
   const [currentTab, setCurrentTab] = useState<'home' | 'upload' | 'analysis' | 'results' | 'replay'>('home');
-  const [isMockMode, setIsMockMode] = useState<boolean>(api.isMockMode());
 
   // Analysis Lifecycle State
   const [validation, setValidation] = useState<VideoFileValidation | null>(null);
@@ -31,20 +30,15 @@ export function App() {
 
   // Check backend health on initial mount
   useEffect(() => {
+    // Force live mode always
+    api.setMockMode(false);
+    
     api.checkHealth().then((isHealthy) => {
       if (!isHealthy) {
-        // Automatically switch to mock mode if backend isn't up
-        api.setMockMode(true);
-        setIsMockMode(true);
+        console.warn('Backend is unreachable. Please ensure the server is running on port 8000.');
       }
     });
   }, []);
-
-  const handleToggleMock = () => {
-    const nextMode = !isMockMode;
-    api.setMockMode(nextMode);
-    setIsMockMode(nextMode);
-  };
 
   // Start analysis pipeline
   const handleStartAnalysis = async () => {
@@ -177,8 +171,6 @@ export function App() {
           }
         }}
         hasAnalysis={analysis !== null}
-        isMockMode={isMockMode}
-        onToggleMock={handleToggleMock}
       />
 
       {/* Main Content Area */}
